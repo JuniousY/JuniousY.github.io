@@ -1,5 +1,5 @@
 ---
-title: Java并发（一） ThreadLocal
+title: ThreadLocal
 date: 2019-03-24 22:12:30
 categories: 开发
 tags: 并发
