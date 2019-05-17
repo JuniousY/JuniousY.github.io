@@ -5,6 +5,8 @@ categories: 刷题
 tags: 算法
 ---
 
+## Problem
+
 Merge *k* sorted linked lists and return it as one sorted list. Analyze and describe its complexity.
 
 **Example:**
@@ -22,6 +24,8 @@ Output: 1->1->2->3->4->4->5->6
 <!-- more -->
 
 
+## Solution
+使用priority queue
 
 ```java
 /*
