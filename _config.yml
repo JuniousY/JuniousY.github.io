@@ -88,7 +88,7 @@ theme: yilia
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: https://github.com/tyrioncc/tyrioncc.github.io
+  repo: git@github.com:tyrioncc/tyrioncc.github.io.git
   branch: master
   message: 更新博客：{{ now('YYYY-MM-DD HH:mm:ss') }}
 
