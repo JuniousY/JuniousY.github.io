@@ -1,4 +1,5 @@
 ---
+layout: post
 title: Java Collection笔记
 date: 2019-03-20 20:19:10
 categories: 开发

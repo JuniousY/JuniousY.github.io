@@ -1,4 +1,5 @@
 ---
+layout: post
 title: Java 同步器核心AQS
 date: 2019-06-14 11:27:12
 categories: 开发

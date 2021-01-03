@@ -1,4 +1,5 @@
 ---
+layout: post
 title: ThreadLocal
 date: 2019-03-24 22:12:30
 categories: 开发

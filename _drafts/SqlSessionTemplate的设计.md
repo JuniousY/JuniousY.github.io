@@ -1,4 +1,5 @@
 ---
+layout: post
 title: SqlSessionTemplate的设计
 date: 2019-04-18 10:53:55
 categories: 开发

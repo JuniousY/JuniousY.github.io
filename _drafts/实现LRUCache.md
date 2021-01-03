@@ -1,4 +1,5 @@
 ---
+layout: post
 title: 实现LRUCache
 date: 2019-03-11 22:57:49
 categories: 开发

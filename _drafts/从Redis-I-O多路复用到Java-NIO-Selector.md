@@ -1,4 +1,5 @@
 ---
+layout: post
 title: 从Redis I/O多路复用到Java NIO Selector
 date: 2019-06-04 15:19:21
 categories: 开发
