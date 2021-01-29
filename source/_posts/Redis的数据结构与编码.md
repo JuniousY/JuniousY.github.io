@@ -1,5 +1,5 @@
 ---
-title: Redis的数据结构与编码
+title: 【本科时期文章】Redis的数据结构与编码
 date: 2019-06-05 15:42:40
 categories: 开发
 tags: Redis

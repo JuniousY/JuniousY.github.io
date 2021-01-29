@@ -1,5 +1,5 @@
 ---
-title: Java 同步器核心AQS
+title: 【本科时期文章】Java 同步器核心AQS
 date: 2019-06-14 11:27:12
 categories: 开发
 tags: 
