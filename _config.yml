@@ -3,18 +3,18 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: YuiTycc的博客
+title: JuniousY的博客
 subtitle: 倾听Ghost的低语
 description: 后端开发,请多多指教
 keywords: "个人博客,java,程序员,开发,后端"
-author: YuiTycc
+author: JuniousY
 email: chengjy42@gmail.com
 language: zh
 timezone: Asia/Shanghai
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: https://yuitycc.me/
+url: https://juniousy.github.io/
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
@@ -88,7 +88,7 @@ theme: pure
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: git@github.com:tyrioncc/tyrioncc.github.io.git
+  repo: git@github.com:JuniousY/JuniousY.github.io.git
   branch: master
   message: 更新博客：{{ now('YYYY-MM-DD HH:mm:ss') }}
 
