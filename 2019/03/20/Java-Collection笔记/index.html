@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>【本科时期文章】Java Collection笔记 | Hexo</title>
+  <meta name="description" content="这是自己整理的一些Collection的要点笔记，比较零碎，可能可读性不是很强。有新内容时会进行补充。Java Collection框架：  Set  , HashSet TreeSet(实现SortedSet) SortedSet   List , LinkedList ArrayList Queue,  PriorityQueue Dequeue Map , HashMap TreeMap(实">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【本科时期文章】Java Collection笔记">
+<meta property="og:url" content="https://juniousy.github.io/2019/03/20/Java-Collection%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="JuniousY的博客">
+<meta property="og:description" content="这是自己整理的一些Collection的要点笔记，比较零碎，可能可读性不是很强。有新内容时会进行补充。Java Collection框架：  Set  , HashSet TreeSet(实现SortedSet) SortedSet   List , LinkedList ArrayList Queue,  PriorityQueue Dequeue Map , HashMap TreeMap(实">
+<meta property="og:locale">
+<meta property="article:published_time" content="2019-03-20T12:19:10.000Z">
+<meta property="article:modified_time" content="2022-05-30T09:06:50.980Z">
+<meta property="article:author" content="JuniousY">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://juniousy.github.io/2019/03/20/Java-Collection%E7%AC%94%E8%AE%B0/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="JuniousY的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/JuniousY" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">JuniousY</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">后端程序员</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Shanghai, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">Categories</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/JuniousY" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%B7%E9%A2%98/">刷题</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%BC%80%E5%8F%91/">开发</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9D%82%E8%B0%88/">杂谈</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B9%B6%E5%8F%91/" rel="tag">并发</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%82%E8%B0%88/" rel="tag">杂谈</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%A2%E7%BB%8F/" rel="tag">面经</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/Java/" style="font-size: 14px;">Java</a> <a href="/tags/Redis/" style="font-size: 13.33px;">Redis</a> <a href="/tags/%E5%B9%B6%E5%8F%91/" style="font-size: 13.67px;">并发</a> <a href="/tags/%E6%9D%82%E8%B0%88/" style="font-size: 13px;">杂谈</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.33px;">算法</a> <a href="/tags/%E9%9D%A2%E7%BB%8F/" style="font-size: 13px;">面经</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Archive</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a><span class="archive-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%9D%82%E8%B0%88/">杂谈</a>
+              </p>
+              <p class="item-title">
+                <a href="/2021/01/29/%E6%9C%AC%E7%A7%91%E5%90%8E%E8%87%B3%E4%BB%8A%EF%BC%88%E4%B8%80%E5%B9%B4%E5%8D%8A%EF%BC%89%E7%9A%84%E4%B8%80%E7%82%B9%E7%82%B9%E6%84%9F%E6%83%B3/" class="title">本科后至今（一年半）的一点点感想</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-01-29T13:00:00.000Z" itemprop="datePublished">2021-01-29</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%BC%80%E5%8F%91/">开发</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/06/23/%E8%99%8E%E6%89%91%E9%9D%A2%E7%BB%8F%E4%B8%8E%E6%80%BB%E7%BB%93/" class="title">【本科时期文章】虎扑面经</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-06-23T13:51:06.000Z" itemprop="datePublished">2019-06-23</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%BC%80%E5%8F%91/">开发</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/06/14/Java-%E5%90%8C%E6%AD%A5%E5%99%A8%E6%A0%B8%E5%BF%83AQS/" class="title">【本科时期文章】Java 同步器核心AQS</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-06-14T03:27:12.000Z" itemprop="datePublished">2019-06-14</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%BC%80%E5%8F%91/">开发</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/06/05/Redis%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%BC%96%E7%A0%81/" class="title">【本科时期文章】Redis的数据结构与编码</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-06-05T07:42:40.000Z" itemprop="datePublished">2019-06-05</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%BC%80%E5%8F%91/">开发</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/06/04/%E4%BB%8ERedis-I-O%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E5%88%B0Java-NIO-Selector/" class="title">【本科时期文章】从Redis I/O多路复用到Java NIO Selector</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-06-04T07:19:21.000Z" itemprop="datePublished">2019-06-04</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-Java-Collection笔记" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      【本科时期文章】Java Collection笔记
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2019/03/20/Java-Collection%E7%AC%94%E8%AE%B0/" class="article-date">
+	  <time datetime="2019-03-20T12:19:10.000Z" itemprop="datePublished">2019-03-20</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E5%BC%80%E5%8F%91/">开发</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/Java/" rel="tag">Java</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2019/03/20/Java-Collection%E7%AC%94%E8%AE%B0/#comments" class="article-comment-link">Comments</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 1.8k(words)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 7(minutes)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>这是自己整理的一些Collection的要点笔记，比较零碎，可能可读性不是很强。有新内容时会进行补充。<br>Java Collection框架：</p>
+<ul>
+<li>Set  , HashSet TreeSet(实现SortedSet)<ul>
+<li>SortedSet</li>
+</ul>
+</li>
+<li>List , LinkedList ArrayList</li>
+<li>Queue,  PriorityQueue</li>
+<li>Dequeue</li>
+<li>Map , HashMap TreeMap(实现SortedMap)<ul>
+<li>SortedMap</li>
+</ul>
+</li>
+</ul>
+<a id="more"></a>
+
+<p>基本方法 add(), remove(), contains(), isEmpty(), addAll()</p>
+<hr>
+<h5 id="hashmap"><a href="#hashmap" class="headerlink" title="hashmap"></a>hashmap</h5><p>线程不安全，允许存null。<br>实现：</p>
+<ol>
+<li><p>内部有一个静态类<code>Node&lt;K,V&gt;</code> ， 实现<code> Map.Entry&lt;K,V&gt;</code>，是“ Basic hash bin node”（文档原文）。而<code>TreeNode</code>也是节点的实现，适用于有冲突的情况，冲突后形成的是红黑树。</p>
+</li>
+<li><p>计算hash值方法：高16位和低16位hashcode异或，降低hash值范围小时的冲突：</p>
+<pre><code class="java">static final int hash(Object key) &#123;
+ int h;
+ return (key == null) ? 0 : (h = key.hashCode()) ^ (h &gt;&gt;&gt; 16);
+&#125;</code></pre>
+</li>
+<li><p>用数组存Node，数组长度必须是2的幂</p>
+<pre><code class="java">transient Node&lt;K,V&gt;[] table;</code></pre>
+</li>
+<li><p>缓存entrySet</p>
+<pre><code class="java">transient Set&lt;Map.Entry&lt;K,V&gt;&gt; entrySet;</code></pre>
+</li>
+<li><p>取：按hash值作为数组下标去取Node。下标是<code>(tab.length - 1) &amp; hash</code>。 由于桶的长度是2的n次方，这么做其实是等于 一个模运算。比如hash是31(11111)，length是4(100)，-1后是11，与运算后是3(11)，就是取模。<br>如果有冲突了，则有多个Node放在一个桶里，要么顺序查找（链表），要么按TreeNode去取（红黑树）。</p>
+<pre><code class="java">public V get(Object key) &#123;
+ Node&lt;K,V&gt; e;
+ return (e = getNode(hash(key), key)) == null ? null : e.value;
+&#125;
+</code></pre>
+</li>
+</ol>
+<p>final Node&lt;K,V&gt; getNode(int hash, Object key) {<br>    Node&lt;K,V&gt;[] tab; Node&lt;K,V&gt; first, e; int n; K k;<br>    if ((tab = table) != null &amp;&amp; (n = tab.length) &gt; 0 &amp;&amp;<br>        (first = tab[(n - 1) &amp; hash]) != null) {<br>        if (first.hash == hash &amp;&amp; // always check first node<br>            ((k = first.key) == key || (key != null &amp;&amp; key.equals(k))))<br>            return first;<br>        if ((e = first.next) != null) {<br>            if (first instanceof TreeNode)<br>                return ((TreeNode&lt;K,V&gt;)first).getTreeNode(hash, key);<br>            do {<br>                if (e.hash == hash &amp;&amp;<br>                    ((k = e.key) == key || (key != null &amp;&amp; key.equals(k))))<br>                    return e;<br>            } while ((e = e.next) != null);<br>        }<br>    }<br>    return null;<br>}</p>
+<pre><code>
+6. 存，往数组的`(tab.length - 1) &amp; hash`处放。桶里没有的话则直接放，有的话，找有没有相同的值，有的话替换。加了后如果容量达到threshold就resize();
+```java
+public V put(K key, V value) &#123;
+    return putVal(hash(key), key, value, false, true);
+&#125;
+
+final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
+               boolean evict) &#123;
+    Node&lt;K,V&gt;[] tab; Node&lt;K,V&gt; p; int n, i;
+    if ((tab = table) == null || (n = tab.length) == 0)
+        n = (tab = resize()).length;
+    if ((p = tab[i = (n - 1) &amp; hash]) == null)
+        tab[i] = newNode(hash, key, value, null);
+    else &#123;
+        Node&lt;K,V&gt; e; K k;
+        if (p.hash == hash &amp;&amp;
+            ((k = p.key) == key || (key != null &amp;&amp; key.equals(k))))
+            e = p;
+        else if (p instanceof TreeNode)
+            e = ((TreeNode&lt;K,V&gt;)p).putTreeVal(this, tab, hash, key, value);
+        else &#123;
+            for (int binCount = 0; ; ++binCount) &#123;
+                if ((e = p.next) == null) &#123;
+                    p.next = newNode(hash, key, value, null);
+                    if (binCount &gt;= TREEIFY_THRESHOLD - 1) // -1 for 1st
+                        treeifyBin(tab, hash);
+                    break;
+                &#125;
+                if (e.hash == hash &amp;&amp;
+                    ((k = e.key) == key || (key != null &amp;&amp; key.equals(k))))
+                    break;
+                p = e;
+            &#125;
+        &#125;
+        if (e != null) &#123; // existing mapping for key
+            V oldValue = e.value;
+            if (!onlyIfAbsent || oldValue == null)
+                e.value = value;
+            afterNodeAccess(e);
+            return oldValue;
+        &#125;
+    &#125;
+    ++modCount;
+    if (++size &gt; threshold)
+        resize();
+    afterNodeInsertion(evict);
+    return null;
+&#125;
+</code></pre>
+<ol start="7">
+<li><strong><code>resize()</code> 方法</strong>，初始化数组或扩容。扩容时数组容量扩大到2倍然后ReHash，遍历原Entry数组，把所有的Entry重新Hash到新数组。通过<code>e.hash &amp; (newCap - 1)</code>算出新的数组下标，原因是因为数组全是2的幂，元素的位置要么是在原位置，要么是在原位置再移动2次幂的位置。然后链表和treenode重新放</li>
+</ol>
+<p>HashMap 在第一次 put 时初始化，类似 ArrayList 在第一次 add 时分配空间。<br>在哈希碰撞的链表长度达到TREEIFY_THRESHOLD（默认8)后，会把该链表转变成树结构</p>
+<hr>
+<h5 id="concurrenthashmap"><a href="#concurrenthashmap" class="headerlink" title="concurrenthashmap"></a>concurrenthashmap</h5><p>HashMap允许一个key和value为null，而ConcurrentHashMap不允许key和value为null，如果发现key或者value为null，则会抛出NPE。</p>
+<p>和hashmap一样有Node&lt;K,V&gt;</p>
+<p>sizeCtl：<code>private transient volatile int sizeCtl;</code>这是一个用于同步多个线程的共享变量，如果值为负数，则说明table正在被某个线程初始化或者扩容。如果某个线程想要初始化table或者对table扩容，需要去竞争sizeCtl这个共享变量，获得变量的线程才有许可去进行接下来的操作，没能获得的线程将会一直自旋来尝试获得这个共享变量。获得sizeCtl这个变量的线程在完成工作之后再设置回来，使其他的线程可以走出自旋进行接下来的操作</p>
+<p>查询和hashmap差不多，(hashCode &amp; (length - 1))取下标。table数组是被volatile关键字修饰，解决了可见性问题</p>
+<p>存要复杂一点。首先计算table下标，下标没数据就通过调用casTabAt方法插入数据。有的话，那么就给该下标处的Node（不管是链表的头还是树的根）加锁插入。     </p>
+<p>扩容操作比较复杂。扩容操作的条件是如果table过小，并且没有被扩容，那么就需要进行扩容，需要使用transfer方法来将久的记录迁移到新的table中去。整个扩容操作分为两个部分，要用到内部类forwardNode。第一部分是构建一个nextTable,它的容量是原来的两倍，这个操作是单线程完成的。<br>第二个部分就是将原来table中的元素复制到nextTable中，这里允许多线程进行操作。</p>
+<p>size()方法，结合baseCount和counterCells数组来得到，通过累计两者的数量即可获得当前ConcurrentHashMap中的记录总量。</p>
+<hr>
+<h5 id="HashSet"><a href="#HashSet" class="headerlink" title="HashSet"></a>HashSet</h5><p>用HashMap实现。(内部：<code>private transient HashMap&lt;E,Object&gt; map;</code>)</p>
+<hr>
+<h5 id="ArrayList"><a href="#ArrayList" class="headerlink" title="ArrayList"></a>ArrayList</h5><p>fail fast机制：checkForComodification()方法检查modCount，检查有无结构性的改变，变了抛<code>ConcurrentModificationException</code>。</p>
+<p>扩容调<code>Arrays.copyOf(elementData, newCapacity);</code></p>
+<p>内部有迭代器类 Iterator。</p>
+<hr>
+<h5 id="LinkedList"><a href="#LinkedList" class="headerlink" title="LinkedList"></a>LinkedList</h5><p>实现List和Deque（即可以当栈、队列、双向队列使用）</p>
+<p>内部是一个双向链表</p>
+<p>字段存有 size、 first Node（头节点）、last Node。通过头结点、尾节点可以很快地进行双向入队出队操作。<br>随机存储效率不如ArrayList，要遍历节点。按下标读取时，会按照size，判断是链表前半段还是后半段，根据这个从头或尾节点开始遍历。</p>
+<p>和ArrayDeque的区别之一：LinkedList可以存null，而ArrayDeque不能存null。这点在写算法题的时候可以注意一下。</p>
+<hr>
+<h5 id="ArrayDeque"><a href="#ArrayDeque" class="headerlink" title="ArrayDeque"></a>ArrayDeque</h5><p>转一张表整理方法。一套接口遇到失败就会抛出异常，另一套遇到失败会返回特殊值。<br>| Queue Method | Equivalent Deque Method | 说明                                   |<br>| ———— | ———————– | ————————————– |<br>| <code>add(e)</code>     | <code>addLast(e)</code>            | 向队尾插入元素，失败则抛出异常         |<br>| <code>offer(e)</code>   | <code>offerLast(e)</code>          | 向队尾插入元素，失败则返回<code>false</code>      |<br>| <code>remove()</code>   | <code>removeFirst()</code>         | 获取并删除队首元素，失败则抛出异常     |<br>| <code>poll()</code>     | <code>pollFirst()</code>           | 获取并删除队首元素，失败则返回<code>null</code>   |<br>| <code>element()</code>  | <code>getFirst()</code>            | 获取但不删除队首元素，失败则抛出异常   |<br>| <code>peek()</code>     | <code>peekFirst()</code>           | 获取但不删除队首元素，失败则返回<code>null</code> |</p>
+<p>内部elements数组的容量一定是2的倍数，并且不会满。存数组的head和tail下标，形成一个循环数组，当这两个下标相等时，数组为空。而在添加元素时，如果这两个下标相等，说明数组已满，将容量翻倍。扩容时重置头索引和尾索引，头索引置为0，尾索引置为原容量的值。</p>
+<hr>
+<h5 id="CopyOnWriteArrayList"><a href="#CopyOnWriteArrayList" class="headerlink" title="CopyOnWriteArrayList"></a>CopyOnWriteArrayList</h5><p>线程安全<br>add set之类的操作都是新建一个复制arraylist<br>适用于 读多些少, 并且数据内容变化比较少的场景</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://juniousy.github.io/2019/03/20/Java-Collection%E7%AC%94%E8%AE%B0/" title="【本科时期文章】Java Collection笔记" target="_blank" rel="external">https://juniousy.github.io/2019/03/20/Java-Collection笔记/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/JuniousY" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/JuniousY" target="_blank"><span class="text-dark">JuniousY</span><small class="ml-1x">后端程序员</small></a></h3>
+        <div>倾听GHOST的低语。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2019/03/24/ThreadLocal/" title="【本科时期文章】ThreadLocal"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2019/03/11/%E5%AE%9E%E7%8E%B0LRUCache/" title="【本科时期文章】实现LRUCache"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,twitter" data-mobile-sites="weibo,qq"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/JuniousY" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+
+
+    <!-- Highlight.js -->
+    <link rel="stylesheet"
+          href="//cdn.bootcss.com/highlight.js/9.2.0/styles/github.min.css">
+    <script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js">
+    </script>
+    <script>
+        hljs.initHighlightingOnLoad();
+    </script>
+
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+
+
+
+
+
+
+</body>
+</html>

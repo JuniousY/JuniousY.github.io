@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>【本科时期文章】Java 同步器核心AQS | Hexo</title>
+  <meta name="description" content="juc(java.util.concurrent) 基于 AQS （ AbstractQueuedSynchronizer ）框架构建锁机制。本文将介绍AQS是如何实现共享状态同步功能，并在此基础上如何实现同步锁机制。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【本科时期文章】Java 同步器核心AQS">
+<meta property="og:url" content="https://juniousy.github.io/2019/06/14/Java-%E5%90%8C%E6%AD%A5%E5%99%A8%E6%A0%B8%E5%BF%83AQS/index.html">
+<meta property="og:site_name" content="JuniousY的博客">
+<meta property="og:description" content="juc(java.util.concurrent) 基于 AQS （ AbstractQueuedSynchronizer ）框架构建锁机制。本文将介绍AQS是如何实现共享状态同步功能，并在此基础上如何实现同步锁机制。">
+<meta property="og:locale">
+<meta property="article:published_time" content="2019-06-14T03:27:12.000Z">
+<meta property="article:modified_time" content="2022-05-30T09:06:50.980Z">
+<meta property="article:author" content="JuniousY">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="并发">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://juniousy.github.io/2019/06/14/Java-%E5%90%8C%E6%AD%A5%E5%99%A8%E6%A0%B8%E5%BF%83AQS/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="JuniousY的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/JuniousY" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">JuniousY</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">后端程序员</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Shanghai, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">Categories</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/JuniousY" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%B7%E9%A2%98/">刷题</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%BC%80%E5%8F%91/">开发</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9D%82%E8%B0%88/">杂谈</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B9%B6%E5%8F%91/" rel="tag">并发</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%82%E8%B0%88/" rel="tag">杂谈</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%A2%E7%BB%8F/" rel="tag">面经</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/Java/" style="font-size: 14px;">Java</a> <a href="/tags/Redis/" style="font-size: 13.33px;">Redis</a> <a href="/tags/%E5%B9%B6%E5%8F%91/" style="font-size: 13.67px;">并发</a> <a href="/tags/%E6%9D%82%E8%B0%88/" style="font-size: 13px;">杂谈</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.33px;">算法</a> <a href="/tags/%E9%9D%A2%E7%BB%8F/" style="font-size: 13px;">面经</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Archive</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a><span class="archive-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%9D%82%E8%B0%88/">杂谈</a>
+              </p>
+              <p class="item-title">
+                <a href="/2021/01/29/%E6%9C%AC%E7%A7%91%E5%90%8E%E8%87%B3%E4%BB%8A%EF%BC%88%E4%B8%80%E5%B9%B4%E5%8D%8A%EF%BC%89%E7%9A%84%E4%B8%80%E7%82%B9%E7%82%B9%E6%84%9F%E6%83%B3/" class="title">本科后至今（一年半）的一点点感想</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-01-29T13:00:00.000Z" itemprop="datePublished">2021-01-29</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%BC%80%E5%8F%91/">开发</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/06/23/%E8%99%8E%E6%89%91%E9%9D%A2%E7%BB%8F%E4%B8%8E%E6%80%BB%E7%BB%93/" class="title">【本科时期文章】虎扑面经</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-06-23T13:51:06.000Z" itemprop="datePublished">2019-06-23</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%BC%80%E5%8F%91/">开发</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/06/14/Java-%E5%90%8C%E6%AD%A5%E5%99%A8%E6%A0%B8%E5%BF%83AQS/" class="title">【本科时期文章】Java 同步器核心AQS</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-06-14T03:27:12.000Z" itemprop="datePublished">2019-06-14</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%BC%80%E5%8F%91/">开发</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/06/05/Redis%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%BC%96%E7%A0%81/" class="title">【本科时期文章】Redis的数据结构与编码</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-06-05T07:42:40.000Z" itemprop="datePublished">2019-06-05</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%BC%80%E5%8F%91/">开发</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/06/04/%E4%BB%8ERedis-I-O%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E5%88%B0Java-NIO-Selector/" class="title">【本科时期文章】从Redis I/O多路复用到Java NIO Selector</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-06-04T07:19:21.000Z" itemprop="datePublished">2019-06-04</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-Java-同步器核心AQS" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      【本科时期文章】Java 同步器核心AQS
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2019/06/14/Java-%E5%90%8C%E6%AD%A5%E5%99%A8%E6%A0%B8%E5%BF%83AQS/" class="article-date">
+	  <time datetime="2019-06-14T03:27:12.000Z" itemprop="datePublished">2019-06-14</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E5%BC%80%E5%8F%91/">开发</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/Java/" rel="tag">Java</a>, <a class="article-tag-link-link" href="/tags/%E5%B9%B6%E5%8F%91/" rel="tag">并发</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2019/06/14/Java-%E5%90%8C%E6%AD%A5%E5%99%A8%E6%A0%B8%E5%BF%83AQS/#comments" class="article-comment-link">Comments</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 1.6k(words)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 7(minutes)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>juc(java.util.concurrent) 基于 AQS （ AbstractQueuedSynchronizer ）框架构建锁机制。本文将介绍AQS是如何实现共享状态同步功能，并在此基础上如何实现同步锁机制。</p>
+<a id="more"></a>
+
+<h2 id="AbstractQueuedSynchronizer"><a href="#AbstractQueuedSynchronizer" class="headerlink" title="AbstractQueuedSynchronizer"></a>AbstractQueuedSynchronizer</h2><h3 id="CLH同步队列"><a href="#CLH同步队列" class="headerlink" title="CLH同步队列"></a>CLH同步队列</h3><p>AQS如其名所示，使用了队列。当共享资源（即多个线程竞争的资源）被某个线程占有时，其他请求该资源的线程将会阻塞，进入CLH同步队列。</p>
+<p>队列的节点为AQS内部类Node。Node持有前驱和后继，因此队列为双向队列。有如下状态：</p>
+<ul>
+<li>SIGNAL 后继节点阻塞(park)或即将阻塞。当前节点完成任务后要唤醒(unpark)后继节点。</li>
+<li>CANCELLED 节点从同步队列中取消</li>
+<li>CONDITION 当前节点进入等待队列中</li>
+<li>PROPAGATE 表示下一次共享式同步状态获取将会无条件传播下去</li>
+<li>0 其他</li>
+</ul>
+<p>AQS通过头尾指针来管理同步队列，同时实现包括获取锁失败的线程进行入队，释放锁时唤醒对同步队列中的线程。未获取到锁的线程会创建节点线程安全（compareAndSetTail）的加入队列尾部。同步队列遵循FIFO，首节点是获取同步状态成功的节点。</p>
+<h3 id="获取锁"><a href="#获取锁" class="headerlink" title="获取锁"></a>获取锁</h3><p>未获取到锁（tryAcquire失败）的线程将创建一个节点，设置到尾节点。</p>
+<pre><code class="java">public final void acquire(int arg) &#123;
+    if (!tryAcquire(arg) &amp;&amp;
+    acquireQueued(addWaiter(Node.EXCLUSIVE), arg))
+        selfInterrupt();
+&#125;
+
+//创建节点至尾节点
+private Node addWaiter(Node mode) &#123;
+    Node node = new Node(Thread.currentThread(), mode);
+    // Try the fast path of enq; backup to full enq on failure
+    Node pred = tail;
+    if (pred != null) &#123;
+        node.prev = pred;
+        if (compareAndSetTail(pred, node)) &#123;
+            pred.next = node;
+            return node;
+        &#125;
+    &#125;
+    // 如果compareAndSetTail失败或者队列里没有节点
+    enq(node);
+    return node;
+&#125;</code></pre>
+<p>enq是一个CAS的入队方法：</p>
+<pre><code class="java">private Node enq(final Node node) &#123;
+    for (;;) &#123;
+        Node t = tail;
+        if (t == null) &#123; // Must initialize
+            if (compareAndSetHead(new Node()))
+                tail = head;
+        &#125; else &#123;
+            node.prev = t;
+            if (compareAndSetTail(t, node)) &#123;
+                t.next = node;
+                return t;
+            &#125;
+        &#125;
+    &#125;</code></pre>
+<p>acquireQueued方法的作用是获取锁。</p>
+<pre><code class="java">final boolean acquireQueued(final Node node, int arg) &#123;
+    boolean failed = true;
+    try &#123;
+        boolean interrupted = false;
+        for (;;) &#123;
+            final Node p = node.predecessor();
+            // 获取锁成功
+            if (p == head &amp;&amp; tryAcquire(arg)) &#123;
+                setHead(node);
+                p.next = null; // help GC
+                failed = false;
+                return interrupted;
+            &#125;
+            // 获取失败则阻塞
+            if (shouldParkAfterFailedAcquire(p, node) &amp;&amp;
+                parkAndCheckInterrupt())
+                interrupted = true;
+        &#125;
+    &#125; finally &#123;
+        if (failed)
+            cancelAcquire(node);
+    &#125;
+&#125;</code></pre>
+<h3 id="释放锁"><a href="#释放锁" class="headerlink" title="释放锁"></a>释放锁</h3><p>首节点的线程在释放锁时，将会唤醒后继节点。而后继节点将会在获取锁成功时将自己设置为首节点。</p>
+<pre><code class="java">public final boolean release(int arg) &#123;
+    if (tryRelease(arg)) &#123;
+        Node h = head;
+        if (h != null &amp;&amp; h.waitStatus != 0)
+            // 唤醒后继节点
+            unparkSuccessor(h);
+        return true;
+    &#125;
+    return false;
+&#125;</code></pre>
+<h3 id="响应中断式获取锁"><a href="#响应中断式获取锁" class="headerlink" title="响应中断式获取锁"></a>响应中断式获取锁</h3><p>可响应中断式锁可调用方法lock.lockInterruptibly();而该方法其底层会调用AQS的acquireInterruptibly方法。</p>
+<pre><code class="java">public final void acquireInterruptibly(int arg)
+    throws InterruptedException &#123;
+    if (Thread.interrupted())
+        throw new InterruptedException();
+    if (!tryAcquire(arg))
+        doAcquireInterruptibly(arg);
+&#125;
+
+private void doAcquireInterruptibly(int arg)
+    throws InterruptedException &#123;
+    final Node node = addWaiter(Node.EXCLUSIVE);
+    boolean failed = true;
+    try &#123;
+        for (;;) &#123;
+            final Node p = node.predecessor();
+            if (p == head &amp;&amp; tryAcquire(arg)) &#123;
+                setHead(node);
+                p.next = null; // help GC
+                failed = false;
+                return;
+            &#125;
+            if (shouldParkAfterFailedAcquire(p, node) &amp;&amp;
+                parkAndCheckInterrupt())
+                // 唯一的区别是当parkAndCheckInterrupt返回true时即线程阻塞时该线程被中断，代码抛出被中断异常。
+                throw new InterruptedException();
+        &#125;
+    &#125; finally &#123;
+        if (failed)
+            cancelAcquire(node);
+    &#125;
+&#125;</code></pre>
+<h3 id="超时等待获取锁"><a href="#超时等待获取锁" class="headerlink" title="超时等待获取锁"></a>超时等待获取锁</h3><p>通过调用lock.tryLock(timeout,TimeUnit)方式达到超时等待获取锁的效果，调用AQS的方法tryAcquireNanos()。</p>
+<pre><code class="java">public final boolean tryAcquireNanos(int arg, long nanosTimeout)
+    throws InterruptedException &#123;
+    if (Thread.interrupted())
+        throw new InterruptedException();
+    return tryAcquire(arg) ||
+        doAcquireNanos(arg, nanosTimeout);
+&#125;
+tongbuqi
+private boolean doAcquireNanos(int arg, long nanosTimeout)
+    throws InterruptedException &#123;
+    if (nanosTimeout &lt;= 0L)
+        return false;
+    final long deadline = System.nanoTime() + nanosTimeout;
+    final Node node = addWaiter(Node.EXCLUSIVE);
+    boolean failed = true;
+    try &#123;
+        for (;;) &#123;
+            final Node p = node.predecessor();
+            if (p == head &amp;&amp; tryAcquire(arg)) &#123;
+                setHead(node);
+                p.next = null; // help GC
+                failed = false;
+                return true;
+            &#125;
+            // 计算等待时间
+            nanosTimeout = deadline - System.nanoTime();
+            if (nanosTimeout &lt;= 0L)
+                return false;
+            if (shouldParkAfterFailedAcquire(p, node) &amp;&amp;
+                nanosTimeout &gt; spinForTimeoutThreshold)
+                LockSupport.parkNanos(this, nanosTimeout);
+            if (Thread.interrupted())
+                throw new InterruptedException();
+        &#125;
+    &#125; finally &#123;
+        if (failed)
+            cancelAcquire(node);
+    &#125;
+    &#125;</code></pre>
+<h3 id="共享锁的获取"><a href="#共享锁的获取" class="headerlink" title="共享锁的获取"></a>共享锁的获取</h3><p>最后看下共享锁的获取。</p>
+<pre><code class="java">public final void acquireShared(int arg) &#123;
+    if (tryAcquireShared(arg) &lt; 0)
+        //获取锁失败时调用
+        doAcquireShared(arg);
+&#125;
+
+private void doAcquireShared(int arg) &#123;
+    final Node node = addWaiter(Node.SHARED);
+    boolean failed = true;
+    try &#123;
+        boolean interrupted = false;
+        for (;;) &#123;
+            final Node p = node.predecessor();
+            if (p == head) &#123;
+                int r = tryAcquireShared(arg);
+                // 当tryAcquireShared返回值&gt;=0时取得锁
+                if (r &gt;= 0) &#123;
+                    setHeadAndPropagate(node, r);
+                    p.next = null; // help GC
+                    if (interrupted)
+                        selfInterrupt();
+                    failed = false;
+                    return;
+                &#125;
+            &#125;
+            if (shouldParkAfterFailedAcquire(p, node) &amp;&amp;
+                parkAndCheckInterrupt())
+                interrupted = true;
+        &#125;
+    &#125; finally &#123;
+        if (failed)
+            cancelAcquire(node);
+    &#125;
+&#125;</code></pre>
+<h3 id="队列外成员变量"><a href="#队列外成员变量" class="headerlink" title="队列外成员变量"></a>队列外成员变量</h3><p>AQ还有<code>state</code>成员变量，volatile int类型，用于同步线程之间的共享状态。当state&gt;0时表示已经获取了锁，对于重入锁来说state值即重入数，当state = 0时表示释放了锁。具体说明见下面各同步器的实现。</p>
+<h2 id="实现同步器"><a href="#实现同步器" class="headerlink" title="实现同步器"></a>实现同步器</h2><p>每一种同步器都通过实现<code>tryacquire</code>（包括如<code>tryAcquireShared</code>之类的方法）、<code>tryRelease</code>来实现同步功能。</p>
+<h3 id="ReentrantLock"><a href="#ReentrantLock" class="headerlink" title="ReentrantLock"></a>ReentrantLock</h3><p>主要看获取锁的过程<br>非公平锁获取锁：</p>
+<pre><code class="java">final boolean nonfairTryAcquire(int acquires) &#123;
+    final Thread current = Thread.currentThread();
+    int c = getState();
+    //如果当前重进入数为0,说明有机会取得锁
+    if (c == 0) &#123;
+        //抢占式获取锁 compareAndSetState是原子方法
+        if (compareAndSetState(0, acquires)) &#123;
+            setExclusiveOwnerThread(current);
+            return true;
+        &#125;
+    &#125;
+    //如果当前线程本身就持有锁，那么叠加重进入数，并且继续获得锁
+    else if (current == getExclusiveOwnerThread()) &#123;
+        int nextc = c + acquires;
+        if (nextc &lt; 0) // overflow
+            throw new Error(&quot;Maximum lock count exceeded&quot;);
+        setState(nextc);
+        return true;
+    &#125;
+    //以上条件都不满足，那么线程进入等待队列。
+    return false;
+&#125;</code></pre>
+<p>公平锁获取锁类似：</p>
+<pre><code class="java">protected final boolean tryAcquire(int acquires) &#123;
+    final Thread current = Thread.currentThread();
+    int c = getState();
+    if (c == 0) &#123;
+    // 区别之处，非抢占式
+        if (!hasQueuedPredecessors() &amp;&amp;
+            compareAndSetState(0, acquires)) &#123;
+            setExclusiveOwnerThread(current);
+            return true;
+        &#125;
+    &#125;
+    else if (current == getExclusiveOwnerThread()) &#123;
+        int nextc = c + acquires;
+        if (nextc &lt; 0)
+            throw new Error(&quot;Maximum lock count exceeded&quot;);
+        setState(nextc);
+        return true;
+    &#125;
+    return false;
+&#125;</code></pre>
+<h3 id="Semaphore"><a href="#Semaphore" class="headerlink" title="Semaphore"></a>Semaphore</h3><p>以<code>state</code>作为信号量使用，例子：</p>
+<pre><code class="java">final int nonfairTryAcquireShared(int acquires) &#123;
+    for (;;) &#123;
+        int available = getState();
+        int remaining = available - acquires; //剩下多少许可资源
+        if (remaining &lt; 0 ||
+            compareAndSetState(available, remaining))
+            return remaining;
+    &#125;
+&#125;</code></pre>
+<h3 id="CountDownLatch"><a href="#CountDownLatch" class="headerlink" title="CountDownLatch"></a>CountDownLatch</h3><p>以<code>state</code>作为计数器，<code>state</code>为0时等待结束：</p>
+<pre><code class="java">public void await() throws InterruptedException &#123;
+    //阻塞直到state为0
+    sync.acquireSharedInterruptibly(1);
+&#125;</code></pre>
+<p>用同步器方法减少state</p>
+<pre><code class="java">public void countDown() &#123;
+    sync.releaseShared(1);
+&#125;</code></pre>
+<pre><code class="java">protected boolean tryReleaseShared(int releases) &#123;
+    // Decrement count; signal when transition to zero
+    for (;;) &#123;
+        int c = getState();
+        if (c == 0)
+            return false;
+        int nextc = c-1;
+        if (compareAndSetState(c, nextc))
+            return nextc == 0;
+    &#125;
+&#125;</code></pre>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://juniousy.github.io/2019/06/14/Java-%E5%90%8C%E6%AD%A5%E5%99%A8%E6%A0%B8%E5%BF%83AQS/" title="【本科时期文章】Java 同步器核心AQS" target="_blank" rel="external">https://juniousy.github.io/2019/06/14/Java-同步器核心AQS/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/JuniousY" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/JuniousY" target="_blank"><span class="text-dark">JuniousY</span><small class="ml-1x">后端程序员</small></a></h3>
+        <div>倾听GHOST的低语。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2019/06/23/%E8%99%8E%E6%89%91%E9%9D%A2%E7%BB%8F%E4%B8%8E%E6%80%BB%E7%BB%93/" title="【本科时期文章】虎扑面经"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2019/06/05/Redis%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%BC%96%E7%A0%81/" title="【本科时期文章】Redis的数据结构与编码"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,twitter" data-mobile-sites="weibo,qq"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/JuniousY" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+
+
+    <!-- Highlight.js -->
+    <link rel="stylesheet"
+          href="//cdn.bootcss.com/highlight.js/9.2.0/styles/github.min.css">
+    <script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js">
+    </script>
+    <script>
+        hljs.initHighlightingOnLoad();
+    </script>
+
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+
+
+
+
+
+
+</body>
+</html>
