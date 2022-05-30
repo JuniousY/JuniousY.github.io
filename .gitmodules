@@ -1,3 +1,6 @@
+[submodule "themes/yilia"]
+	path = themes/yilia
+	url = git@github.com:JuniousY/hexo-theme-yilia.git
 [submodule "themes/pure"]
 	path = themes/pure
 	url = git@github.com:JuniousY/hexo-theme-pure.git
