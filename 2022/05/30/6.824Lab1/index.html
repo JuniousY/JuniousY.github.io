@@ -17,19 +17,21 @@
   <meta http-equiv="window-target" content="_top" />
   
   
-  <title>Archive: 2021 | Hexo</title>
-  <meta name="description" content="后端开发,请多多指教">
-<meta property="og:type" content="website">
-<meta property="og:title" content="JuniousY的博客">
-<meta property="og:url" content="https://juniousy.github.io/archives/2021/index.html">
+  <title>6.824 Lab1 - Map Reduce | Hexo</title>
+  <meta name="description" content="--- wc test: PASS *** Starting indexer test. --- indexer test: PASS *** Starting map parallelism test. --- map parallelism test: PASS *** Starting reduce parallelism test. --- reduce parallelism test:">
+<meta property="og:type" content="article">
+<meta property="og:title" content="6.824 Lab1 - Map Reduce">
+<meta property="og:url" content="https://juniousy.github.io/2022/05/30/6.824Lab1/index.html">
 <meta property="og:site_name" content="JuniousY的博客">
-<meta property="og:description" content="后端开发,请多多指教">
+<meta property="og:description" content="--- wc test: PASS *** Starting indexer test. --- indexer test: PASS *** Starting map parallelism test. --- map parallelism test: PASS *** Starting reduce parallelism test. --- reduce parallelism test:">
 <meta property="og:locale">
+<meta property="article:published_time" content="2022-05-30T12:00:00.000Z">
+<meta property="article:modified_time" content="2022-05-31T17:02:41.566Z">
 <meta property="article:author" content="JuniousY">
-<meta property="article:tag" content="个人博客,java,程序员,开发,后端">
+<meta property="article:tag" content="distributed system">
 <meta name="twitter:card" content="summary">
   <!-- Canonical links -->
-  <link rel="canonical" href="https://juniousy.github.io/archives/2021/index.html">
+  <link rel="canonical" href="https://juniousy.github.io/2022/05/30/6.824Lab1/index.html">
   
     <link rel="alternate" href="/atom.xml" title="JuniousY的博客" type="application/atom+xml">
   
@@ -297,48 +299,187 @@
   
   
 <main class="main" role="main">
-  	<article class="content article article-archives article-type-list" itemscope="">
-	    <header class="article-header">
-	      <h1 itemprop="title">Archive: 2021</h1>
-	      <p class="text-muted">Total 10 articles</p>
-	    </header>
-	    <div class="article-body">
-	      
-  
-  
+  <div class="content">
+  <article id="post-6.824Lab1" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
     
-    
+    <div class="article-header">
       
+        
+  
+    <h1 class="article-title" itemprop="name">
+      6.824 Lab1 - Map Reduce
+    </h1>
+  
+
       
-      <section class="panel panel-default b-no">
-        <div class="panel-heading" role="tab">
-          <h3 class="panel-title">
-            <a data-toggle="collapse" href="#collapse2021" aria-expanded="true">
-              <i class="icon icon-calendar-plus text-active"></i><i class="icon icon-calendar-minus text"></i>
-              2021
-            </a>
-            <!-- <a href="/archives/2021" class="archive-year">2021</a> -->
-          </h3>
-        </div>
-        <div id="collapse2021" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading2021">
-        <div class="panel-body">
-          <div class="collection">
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/05/30/6.824Lab1/" class="article-date">
+	  <time datetime="2022-05-30T12:00:00.000Z" itemprop="datePublished">2022-05-30</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/Lab/">Lab</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/distributed-system/" rel="tag">distributed system</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/05/30/6.824Lab1/#comments" class="article-comment-link">Comments</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 942(words)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 3(minutes)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <pre><code class="text">--- wc test: PASS
+*** Starting indexer test.
+--- indexer test: PASS
+*** Starting map parallelism test.
+--- map parallelism test: PASS
+*** Starting reduce parallelism test.
+--- reduce parallelism test: PASS
+*** Starting crash test.
+--- crash test: PASS
+*** PASSED ALL TESTS</code></pre>
+<p>课程要求是不公开自己的代码的，遵守一下规则。这里简单讲讲思路和遇到的问题</p>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><p>首先思考一下“要做什么”，所以做了一下功能点的拆分</p>
+<pre><code class="md">1. master收到任务（文件名）后负责拆分任务
+2. worker向master申请任务（可能是map也可能是reduce）
+3. worker map操作，存入中间文件
+4. worker reduce操作，读取中间文件，写入文件
+5. crash worker 的处理
+6. master判断任务是否已经全部完成；worker结束进程</code></pre>
+<p>我的实现用了两个rpc</p>
+<pre><code class="go">func (m *Master) AskForTask(args struct&#123;&#125;, reply *AskForTaskReply) error
+
+func (m *Master) ReportTask(args ReportTaskArgs, replay *struct&#123;&#125;) error </code></pre>
+<p>方法<code>AskForTask</code>就是一个worker向master申请任务的过程，对应功能点1、2和6。1和2好理解，为什么会有6是因为考虑到worker持续循环调用AskForTask，所以把判断任务全部完成的状态也加在这个方法里，AskForTaskReply会告知worker任务全部完成</p>
+<p>功能点3、4在<code>worker.go</code>下实现。map操作的核心思想是读取待处理的文件，调用mapf，写入intermedia file，通过rpc告知master任务已完成。master会维护一个文件完成情况的map，key是待处理map任务的id，value是任务状态（未开始、进行中、已完成）。reduce操作的核心思想是根据master指定的intermedia filename去读取中间文件，然后调用reducef，然后通知任务完成。我这样实现的话，有个关键的点是，map在通知任务完成时，要把中间文件的filename也告诉master，因为这个reduce任务的来源。同样master也会有类似的map去维护reduce任务的状态。</p>
+<p>任务5我的做法比较简单，在每次分发任务时都新建一个线程延时等待，如果等待时间结束，任务还未完成，就把任务从进行中改为未开始。这个做法还是比较粗糙的，不过在这个lab里能够处理。</p>
+<h3 id="问题点"><a href="#问题点" class="headerlink" title="问题点"></a>问题点</h3><h4 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h4><p>我在wsl2环境下实现，而golang版本不是<code>Go1.13</code>，而是<code>Go1.18.2</code>。这里还是不建议更改版本，不过因为module相关的一些问题，哪怕我用了go1.13也会触发同样的问题，所以最后我改了下测试文件的编译命令，直接用1.18去跑（逃</p>
+<pre><code class="shell">...
+(cd .. &amp;&amp; GO111MODULE=off go build $RACE mrmaster.go) || exit 1
+(cd .. &amp;&amp; GO111MODULE=off go build $RACE mrworker.go) || exit 1
+(cd .. &amp;&amp; GO111MODULE=off go build $RACE mrsequential.go) || exit 1
+...</code></pre>
+<p>这个改动应该是不影响在要求的环境下的测试结果的</p>
+<h4 id="race"><a href="#race" class="headerlink" title="race"></a>race</h4><p>加-race被提醒有地方会有问题</p>
+<pre><code class="text">WARNING: DATA RACE
+Write at 0x00c000100220 by goroutine 78:
+  _/home/...../MIT6.824/src/mr.(*Master).AskForTask()
+      /home/...../MIT6.824/src/mr/master.go:75 +0x885
+
+Previous read at 0x00c000100220 by main goroutine:
+  _/home/.....g/MIT6.824/src/mr.(*Master).Done()
+      /home/...../MIT6.824/src/mr/master.go:134 +0xef</code></pre>
+<h4 id="parallelism测试卡死-只能手动Kill"><a href="#parallelism测试卡死-只能手动Kill" class="headerlink" title="parallelism测试卡死 只能手动Kill"></a>parallelism测试卡死 只能手动Kill</h4><p>这个问题一开始很困惑，后来发现单跑这个测试是能通过的。然后我发现这个测试会读当前文件夹。而我一开始没有手动删除intermedia file，这个test也不会删之前的intermedia file，我猜测问题点出在这里。事实证明在加入了任务完成后删除intermedia file后，就能通过了。</p>
+<h4 id="其他小bug"><a href="#其他小bug" class="headerlink" title="其他小bug"></a>其他小bug</h4><p>比如重复问题，debug发现是没有等map全部结束就发出去了reduce任务。</p>
+<pre><code class="text">ADLER 1
+ADVENTURE 12
+ADVENTURES 7
+AFTER 2
+AGREE 16
+AGREEMENT 8
+
+...
+
+ADLER 1
+ADVENTURE 12
+ADVENTURES 7
+AFTER 2
+AFTER 2
+AGREE 16
+AGREEMENT 8</code></pre>
+<p>还有crash test超时问题，打了日志后再稍微看下代码就发现是小bug，不多赘述。</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://juniousy.github.io/2022/05/30/6.824Lab1/" title="6.824 Lab1 - Map Reduce" target="_blank" rel="external">https://juniousy.github.io/2022/05/30/6.824Lab1/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/JuniousY" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/JuniousY" target="_blank"><span class="text-dark">JuniousY</span><small class="ml-1x">后端程序员</small></a></h3>
+        <div>倾听GHOST的低语。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
     
     
-<a href="/2021/01/29/%E5%AD%98%E6%A1%A3/%E6%9C%AC%E7%A7%91%E5%90%8E%E8%87%B3%E4%BB%8A%EF%BC%88%E4%B8%80%E5%B9%B4%E5%8D%8A%EF%BC%89%E7%9A%84%E4%B8%80%E7%82%B9%E7%82%B9%E6%84%9F%E6%83%B3/" class="collection-item"   itemprop="url">
-  <time datetime="2021-01-29T13:00:00.000Z" itemprop="datePublished">2021-01-29</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 本科后至今（一年半）的一点点感想
-</a>
-
-
+    <li class="next">
+      <a href="/2021/01/29/%E5%AD%98%E6%A1%A3/%E6%9C%AC%E7%A7%91%E5%90%8E%E8%87%B3%E4%BB%8A%EF%BC%88%E4%B8%80%E5%B9%B4%E5%8D%8A%EF%BC%89%E7%9A%84%E4%B8%80%E7%82%B9%E7%82%B9%E6%84%9F%E6%83%B3/" title="本科后至今（一年半）的一点点感想"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
   
   
-    </div></div></div></section>
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,twitter" data-mobile-sites="weibo,qq"></div>
+    
+  </div>
+  </div>
+</nav>
   
 
-	    </div>
-  	</article>
-  	 	
+
 </main>
 
   <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
@@ -402,6 +543,12 @@ window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
 
 
 
+   
+
+
+
+
+   
 
 
 
