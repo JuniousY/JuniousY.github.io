@@ -383,7 +383,8 @@ private Node addWaiter(Node mode) &#123;
     // 如果compareAndSetTail失败或者队列里没有节点
     enq(node);
     return node;
-&#125;</code></pre>
+&#125;
+</code></pre>
 <p>enq是一个CAS的入队方法：</p>
 <pre><code class="java">private Node enq(final Node node) &#123;
     for (;;) &#123;
@@ -398,7 +399,8 @@ private Node addWaiter(Node mode) &#123;
                 return t;
             &#125;
         &#125;
-    &#125;</code></pre>
+    &#125;
+</code></pre>
 <p>acquireQueued方法的作用是获取锁。</p>
 <pre><code class="java">final boolean acquireQueued(final Node node, int arg) &#123;
     boolean failed = true;
@@ -422,7 +424,8 @@ private Node addWaiter(Node mode) &#123;
         if (failed)
             cancelAcquire(node);
     &#125;
-&#125;</code></pre>
+&#125;
+</code></pre>
 <h3 id="释放锁"><a href="#释放锁" class="headerlink" title="释放锁"></a>释放锁</h3><p>首节点的线程在释放锁时，将会唤醒后继节点。而后继节点将会在获取锁成功时将自己设置为首节点。</p>
 <pre><code class="java">public final boolean release(int arg) &#123;
     if (tryRelease(arg)) &#123;
@@ -433,7 +436,8 @@ private Node addWaiter(Node mode) &#123;
         return true;
     &#125;
     return false;
-&#125;</code></pre>
+&#125;
+</code></pre>
 <h3 id="响应中断式获取锁"><a href="#响应中断式获取锁" class="headerlink" title="响应中断式获取锁"></a>响应中断式获取锁</h3><p>可响应中断式锁可调用方法lock.lockInterruptibly();而该方法其底层会调用AQS的acquireInterruptibly方法。</p>
 <pre><code class="java">public final void acquireInterruptibly(int arg)
     throws InterruptedException &#123;
@@ -465,7 +469,8 @@ private void doAcquireInterruptibly(int arg)
         if (failed)
             cancelAcquire(node);
     &#125;
-&#125;</code></pre>
+&#125;
+</code></pre>
 <h3 id="超时等待获取锁"><a href="#超时等待获取锁" class="headerlink" title="超时等待获取锁"></a>超时等待获取锁</h3><p>通过调用lock.tryLock(timeout,TimeUnit)方式达到超时等待获取锁的效果，调用AQS的方法tryAcquireNanos()。</p>
 <pre><code class="java">public final boolean tryAcquireNanos(int arg, long nanosTimeout)
     throws InterruptedException &#123;
@@ -505,7 +510,8 @@ private boolean doAcquireNanos(int arg, long nanosTimeout)
         if (failed)
             cancelAcquire(node);
     &#125;
-    &#125;</code></pre>
+    &#125;
+</code></pre>
 <h3 id="共享锁的获取"><a href="#共享锁的获取" class="headerlink" title="共享锁的获取"></a>共享锁的获取</h3><p>最后看下共享锁的获取。</p>
 <pre><code class="java">public final void acquireShared(int arg) &#123;
     if (tryAcquireShared(arg) &lt; 0)
@@ -540,7 +546,8 @@ private void doAcquireShared(int arg) &#123;
         if (failed)
             cancelAcquire(node);
     &#125;
-&#125;</code></pre>
+&#125;
+</code></pre>
 <h3 id="队列外成员变量"><a href="#队列外成员变量" class="headerlink" title="队列外成员变量"></a>队列外成员变量</h3><p>AQ还有<code>state</code>成员变量，volatile int类型，用于同步线程之间的共享状态。当state&gt;0时表示已经获取了锁，对于重入锁来说state值即重入数，当state = 0时表示释放了锁。具体说明见下面各同步器的实现。</p>
 <h2 id="实现同步器"><a href="#实现同步器" class="headerlink" title="实现同步器"></a>实现同步器</h2><p>每一种同步器都通过实现<code>tryacquire</code>（包括如<code>tryAcquireShared</code>之类的方法）、<code>tryRelease</code>来实现同步功能。</p>
 <h3 id="ReentrantLock"><a href="#ReentrantLock" class="headerlink" title="ReentrantLock"></a>ReentrantLock</h3><p>主要看获取锁的过程<br>非公平锁获取锁：</p>
@@ -565,7 +572,8 @@ private void doAcquireShared(int arg) &#123;
     &#125;
     //以上条件都不满足，那么线程进入等待队列。
     return false;
-&#125;</code></pre>
+&#125;
+</code></pre>
 <p>公平锁获取锁类似：</p>
 <pre><code class="java">protected final boolean tryAcquire(int acquires) &#123;
     final Thread current = Thread.currentThread();
@@ -586,7 +594,8 @@ private void doAcquireShared(int arg) &#123;
         return true;
     &#125;
     return false;
-&#125;</code></pre>
+&#125;
+</code></pre>
 <h3 id="Semaphore"><a href="#Semaphore" class="headerlink" title="Semaphore"></a>Semaphore</h3><p>以<code>state</code>作为信号量使用，例子：</p>
 <pre><code class="java">final int nonfairTryAcquireShared(int acquires) &#123;
     for (;;) &#123;
@@ -596,16 +605,19 @@ private void doAcquireShared(int arg) &#123;
             compareAndSetState(available, remaining))
             return remaining;
     &#125;
-&#125;</code></pre>
+&#125;
+</code></pre>
 <h3 id="CountDownLatch"><a href="#CountDownLatch" class="headerlink" title="CountDownLatch"></a>CountDownLatch</h3><p>以<code>state</code>作为计数器，<code>state</code>为0时等待结束：</p>
 <pre><code class="java">public void await() throws InterruptedException &#123;
     //阻塞直到state为0
     sync.acquireSharedInterruptibly(1);
-&#125;</code></pre>
+&#125;
+</code></pre>
 <p>用同步器方法减少state</p>
 <pre><code class="java">public void countDown() &#123;
     sync.releaseShared(1);
-&#125;</code></pre>
+&#125;
+</code></pre>
 <pre><code class="java">protected boolean tryReleaseShared(int releases) &#123;
     // Decrement count; signal when transition to zero
     for (;;) &#123;
@@ -616,7 +628,8 @@ private void doAcquireShared(int arg) &#123;
         if (compareAndSetState(c, nextc))
             return nextc == 0;
     &#125;
-&#125;</code></pre>
+&#125;
+</code></pre>
 
       
     </div>

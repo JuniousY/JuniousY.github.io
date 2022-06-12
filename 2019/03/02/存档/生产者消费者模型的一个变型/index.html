@@ -352,7 +352,8 @@
 <span id="more"></span>
 <hr>
 <h4 id="模拟当时的解决方法"><a href="#模拟当时的解决方法" class="headerlink" title="模拟当时的解决方法"></a>模拟当时的解决方法</h4><p>用来解决生产者消费者问题的BlockingQueue：</p>
-<pre><code class="java">private static final BlockingQueue&lt;Task&gt; taskBlockingQueue = new ArrayBlockingQueue&lt;&gt;(100);</code></pre>
+<pre><code class="java">private static final BlockingQueue&lt;Task&gt; taskBlockingQueue = new ArrayBlockingQueue&lt;&gt;(100);
+</code></pre>
 <p>生产者部分没有什么区别，直接往队列里添加任务：</p>
 <pre><code class="java">private void produce(int taskId) &#123;
   try &#123;
@@ -361,9 +362,11 @@
   &#125; catch (InterruptedException e) &#123;
     e.printStackTrace();
   &#125;
-&#125;</code></pre>
+&#125;
+</code></pre>
 <p>消费者部分在打包的过程中都对阻塞队列加锁，不允许其他消费者获取任务：</p>
-<pre><code class="java">private static final Lock packageLock = new ReentrantLock();</code></pre>
+<pre><code class="java">private static final Lock packageLock = new ReentrantLock();
+</code></pre>
 <p>消费者需要在指定时间内打包，超时则退出这轮消费。</p>
 <pre><code class="java">private void consume() &#123;
   try &#123;
@@ -664,7 +667,8 @@ class Task &#123;
 消费者4    完成任务865
 生产者3    添加任务347
 消费者4    完成任务347
-消费者4    打包20个    耗时1318</code></pre>
+消费者4    打包20个    耗时1318
+</code></pre>
 <p>可以看到每次打包只有一个消费者在进行消费，其实相当于只有一个消费者线程，等于没有使用并发。<br>当消费者任务很耗时时：</p>
 <pre><code class="java">private void doConsume() &#123;
   Task task = null;
@@ -679,7 +683,8 @@ class Task &#123;
     return;
   &#125;
   System.out.println(String.format(&quot;消费者%d\t完成任务%d&quot;, id, task.getId()));
-&#125;</code></pre>
+&#125;
+</code></pre>
 <p>这时候在中止时可以看到队列有10到30不等的Task暂留。模拟耗时越长，暂留的越多，也就是相当于性能越差。</p>
 <hr>
 <h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p>实际上不需要加锁，设定一个超时时间即可。</p>
@@ -726,7 +731,8 @@ class Consumer2 implements Runnable &#123;
     System.out.println(String.format(&quot;消费者%d\t打包%d个\t耗时%d\t%s&quot;, id, packageNum, end - start, tasks));
   &#125;
 
-&#125;</code></pre>
+&#125;
+</code></pre>
 <pre><code>生产者2    添加任务539
 生产者0    添加任务319
 生产者1    添加任务655

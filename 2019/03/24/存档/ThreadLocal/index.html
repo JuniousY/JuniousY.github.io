@@ -409,8 +409,9 @@ public class ThreadLocalTest &#123;
     ThreadLocalTest test = new ThreadLocalTest();
     test.test();
   &#125;
-
-&#125;</code></pre>
+  
+&#125;
+</code></pre>
 <p>结果如下</p>
 <pre><code>........(上略)
 Thread-13 userId: 135
@@ -428,7 +429,8 @@ Thread-11 userId: 146
 Thread-8 userId: 147
 Thread-12 userId: 149
 Thread-14 userId: 148
-Thread-13 userId: 150</code></pre>
+Thread-13 userId: 150
+</code></pre>
 <hr>
 <h4 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h4><p>核心是ThreadLocal的内部静态类ThreadLocalMap。map的key是ThreadLocal对象，value是和ThreadLocal对象有关联的值。</p>
 <pre><code class="java">static class Entry extends WeakReference&lt;ThreadLocal&lt;?&gt;&gt; &#123;
@@ -439,25 +441,29 @@ Thread-13 userId: 150</code></pre>
         super(k);
         value = v;
     &#125;
-&#125;</code></pre>
+&#125;
+</code></pre>
 <p>注意内部Entry是WeakReference的，原因是出于性能考虑。由于不是强联系，所以其他正在使用ThreadLocal的线程，不会妨碍gc那些来自同一个ThreadLocal的终止后的线程的变量，简单来讲就是待gc的变量会被正确gc。</p>
 <p>在ThreadLocalMap 的 remove 方法中，除了讲entry的引用设为null以外，还调用了一个expungeStaleEntry方法：</p>
 <pre><code class="java">if (e.get() == key) &#123;
     e.clear();
     expungeStaleEntry(i);
     return;
-&#125;</code></pre>
+&#125;
+</code></pre>
 <p>其中会将所有键为 null 的 Entry 的值设置为 null，这样可以防止内存泄露，已经不再被使用且已被回收的 ThreadLocal 对象对应的Entry也会被gc清除：</p>
 <pre><code class="java">if (k == null) &#123;
     e.value = null;
     tab[i] = null;
     size--;
-&#125;</code></pre>
+&#125;
+</code></pre>
 <p>在同样的还有rehash, resize方法方法中，也有类似的设置value为null的操作。</p>
 <p>在创建线程时，该线程持有threadLocals。这个引用是在ThreadLocal的createMap方法中设定的，否则为null。</p>
 <pre><code class="java">void createMap(Thread t, T firstValue) &#123;
     t.threadLocals = new ThreadLocalMap(this, firstValue);
-&#125;</code></pre>
+&#125;
+</code></pre>
 <p>调用ThreadLocalMap的构造方法：</p>
 <pre><code class="java">ThreadLocalMap(ThreadLocal&lt;?&gt; firstKey, Object firstValue) &#123;
     table = new Entry[INITIAL_CAPACITY];
@@ -465,7 +471,8 @@ Thread-13 userId: 150</code></pre>
     table[i] = new Entry(firstKey, firstValue);
     size = 1;
     setThreshold(INITIAL_CAPACITY);
-&#125;</code></pre>
+&#125;
+</code></pre>
 <p>再返回来看ThreadLocal就很好理解了<br>get方法：</p>
 <pre><code class="java">public T get() &#123;
     Thread t = Thread.currentThread();
@@ -479,7 +486,8 @@ Thread-13 userId: 150</code></pre>
         &#125;
     &#125;
     return setInitialValue();
-&#125;</code></pre>
+&#125;
+</code></pre>
 <p>set方法：</p>
 <pre><code class="java">public void set(T value) &#123;
     Thread t = Thread.currentThread();
@@ -488,7 +496,8 @@ Thread-13 userId: 150</code></pre>
         map.set(this, value); //向map中存值，key就是当前ThreadLocal对象
     else
         createMap(t, value); 
-&#125;</code></pre>
+&#125;
+</code></pre>
 <hr>
 <h4 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h4><p>很常见的应用在Session中存储数据。一个Session对应一个线程，对应一组线程内方法间的共享变量，这些变量都可以由ThreadLocal存储。</p>
 <p>参考下<a target="_blank" rel="noopener" href="https://www.cnblogs.com/youzhibing/p/6690341.html">结合ThreadLocal来看spring事务源码，感受下清泉般的洗涤！</a>，可以看到在Spring事务中，也有类似ThreadLocal的操作，将数据库connection绑定到当前线程，使用的也是一个map。</p>

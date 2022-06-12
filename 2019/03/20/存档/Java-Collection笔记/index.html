@@ -373,13 +373,16 @@
 <pre><code class="java">static final int hash(Object key) &#123;
  int h;
  return (key == null) ? 0 : (h = key.hashCode()) ^ (h &gt;&gt;&gt; 16);
-&#125;</code></pre>
+&#125;
+</code></pre>
 </li>
 <li><p>用数组存Node，数组长度必须是2的幂</p>
-<pre><code class="java">transient Node&lt;K,V&gt;[] table;</code></pre>
+<pre><code class="java">transient Node&lt;K,V&gt;[] table;
+</code></pre>
 </li>
 <li><p>缓存entrySet</p>
-<pre><code class="java">transient Set&lt;Map.Entry&lt;K,V&gt;&gt; entrySet;</code></pre>
+<pre><code class="java">transient Set&lt;Map.Entry&lt;K,V&gt;&gt; entrySet;
+</code></pre>
 </li>
 <li><p>取：按hash值作为数组下标去取Node。下标是<code>(tab.length - 1) &amp; hash</code>。 由于桶的长度是2的n次方，这么做其实是等于 一个模运算。比如hash是31(11111)，length是4(100)，-1后是11，与运算后是3(11)，就是取模。<br>如果有冲突了，则有多个Node放在一个桶里，要么顺序查找（链表），要么按TreeNode去取（红黑树）。</p>
 <pre><code class="java">public V get(Object key) &#123;

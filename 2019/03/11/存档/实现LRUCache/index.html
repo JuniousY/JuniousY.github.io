@@ -383,8 +383,9 @@ class LRUCache&lt;K, V&gt; &#123;
   public final void put(K key, V value) &#123;
     map.put(key, value);
   &#125;
-
-&#125;</code></pre>
+  
+&#125;
+</code></pre>
 <hr>
 <h3 id="HashMap-双向链表实现"><a href="#HashMap-双向链表实现" class="headerlink" title="HashMap + 双向链表实现"></a>HashMap + 双向链表实现</h3><p>之所以LinkedHashMap能保有这样的性质，是因为它内部的实现是依托了HashMap和双向链表，因此不用LinkedHashMap我们也能实现LRUCache算法。</p>
 <p>基本框架</p>
@@ -396,7 +397,7 @@ class LRUCache&lt;K, V&gt; &#123;
 
   private Node&lt;K, V&gt; head;
   private Node&lt;K, V&gt; tail;
-
+    
   public LRUCache(int capacity) &#123;
     this.capacity = capacity;
     map = new HashMap&lt;&gt;(capacity);
@@ -415,7 +416,8 @@ class LRUCache&lt;K, V&gt; &#123;
 
   &#125;
 
-&#125;</code></pre>
+&#125;
+</code></pre>
 <p>公用方法</p>
 <pre><code class="java">private void raiseNode(Node&lt;K, V&gt; node) &#123;
     if (node.pre == head) &#123;
@@ -436,7 +438,8 @@ private void setFirst(Node&lt;K, V&gt; node) &#123;
     node.pre = head;
     first.pre = node;
     node.next = first;
-&#125;</code></pre>
+&#125;
+</code></pre>
 <p>get方法，从map里拿Value，同时将它置为链表头</p>
 <pre><code class="java">public V get(K key) &#123;
     if (!map.containsKey(key)) &#123;
@@ -445,7 +448,8 @@ private void setFirst(Node&lt;K, V&gt; node) &#123;
     Node&lt;K, V&gt; node = map.get(key);
     raiseNode(node);
     return node.value;
-&#125;</code></pre>
+&#125;
+</code></pre>
 <p>save方法，如果缓存已满，删除链表尾的值，再添加新的值到链表头</p>
 <pre><code class="java">public void save(K key, V value) &#123;
     if (map.containsKey(key)) &#123;
@@ -474,7 +478,8 @@ private void insertNode(K key, V value) &#123;
 
 private boolean isFull() &#123;
     return map.size() &gt;= capacity;
-&#125;</code></pre>
+&#125;
+</code></pre>
 <p>测试</p>
 <pre><code class="java">import org.junit.Test;
 
@@ -504,7 +509,8 @@ public class LRUCacheTest &#123;
 //head -&gt; 2 -&gt; 1 -&gt; 0 -&gt; tail
 //head -&gt; 3 -&gt; 2 -&gt; 1 -&gt; tail
 //head -&gt; 2 -&gt; 3 -&gt; 1 -&gt; tail
-//head -&gt; 4 -&gt; 2 -&gt; 3 -&gt; tail</code></pre>
+//head -&gt; 4 -&gt; 2 -&gt; 3 -&gt; tail
+</code></pre>
 
       
     </div>

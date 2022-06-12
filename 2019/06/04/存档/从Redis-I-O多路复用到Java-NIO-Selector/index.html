@@ -364,7 +364,8 @@
 <pre><code class="c">extern int select (int __nfds, fd_set *__restrict __readfds,
            fd_set *__restrict __writefds,
            fd_set *__restrict __exceptfds,
-           struct timeval *__restrict __timeout);</code></pre>
+           struct timeval *__restrict __timeout);
+</code></pre>
 <p>Redis封装首先通过<code>aeApiCreate</code>初始化 rfds 和 wfds，注册到aeEventLoop中去。</p>
 <pre><code class="c">static int aeApiCreate(aeEventLoop *eventLoop) &#123;
     aeApiState *state = zmalloc(sizeof(aeApiState));
@@ -374,7 +375,8 @@
     FD_ZERO(&amp;state-&gt;wfds);
     eventLoop-&gt;apidata = state;
     return 0;
-&#125;</code></pre>
+&#125;
+</code></pre>
 <p>而 <code>aeApiAddEvent</code> 和 <code>aeApiDelEvent</code> 会通过 FD_SET 和 FD_CLR 修改 fd_set 中对应 FD 的标志位。</p>
 <pre><code class="c">static int aeApiAddEvent(aeEventLoop *eventLoop, int fd, int mask) &#123;
     aeApiState *state = eventLoop-&gt;apidata;
@@ -389,7 +391,8 @@ static void aeApiDelEvent(aeEventLoop *eventLoop, int fd, int mask) &#123;
 
     if (mask &amp; AE_READABLE) FD_CLR(fd,&amp;state-&gt;rfds);
     if (mask &amp; AE_WRITABLE) FD_CLR(fd,&amp;state-&gt;wfds);
-&#125;</code></pre>
+&#125;
+</code></pre>
 <p><code>aeApiPoll</code>是实际调用 select 函数的部分，其作用就是在 I/O 多路复用函数返回时，将对应的 FD 加入 aeEventLoop 的 fired 数组中，并返回事件的个数：</p>
 <pre><code class="c">static int aeApiPoll(aeEventLoop *eventLoop, struct timeval *tvp) &#123;
     aeApiState *state = eventLoop-&gt;apidata;
@@ -416,7 +419,8 @@ static void aeApiDelEvent(aeEventLoop *eventLoop, int fd, int mask) &#123;
         &#125;
     &#125;
     return numevents;
-&#125;</code></pre>
+&#125;
+</code></pre>
 <p>epoll函数的封装类似。区别在于 epoll_wait 函数返回时并不需要遍历所有的 FD 查看读写情况；在  epoll_wait 函数返回时会提供一个 epoll_event 数组，其中保存了发生的 epoll 事件（EPOLLIN、EPOLLOUT、EPOLLERR 和 EPOLLHUP）以及发生该事件的 FD。Redis封装的调用只需要将<code>epoll_event</code>数组中存储的信息加入eventLoop的 fired 数组中，将信息传递给上层模块：</p>
 <pre><code class="c">static int aeApiPoll(aeEventLoop *eventLoop, struct timeval *tvp) &#123;
     aeApiState *state = eventLoop-&gt;apidata;
@@ -441,12 +445,14 @@ static void aeApiDelEvent(aeEventLoop *eventLoop, int fd, int mask) &#123;
         &#125;
     &#125;
     return numevents;
-&#125;</code></pre>
+&#125;
+</code></pre>
 <p>当Socket变得可读时（客户端对Socket执行 write 操作，或者执行 close 操作）， 或者有新的可应答（acceptable）Socket出现时（客户端对服务器的监听Socket执行 connect 操作），Socket产生 AE_READABLE 事件。而当Socket变得可写时（客户端对Socket执行 read 操作）， Socket产生 AE_WRITABLE 事件。<br>I/O 多路复用程序允许服务器同时监听Socket的 AE_READABLE 事件和 AE_WRITABLE 事件， 如果一个Socket同时产生了这两种事件， 那么文件事件分派器会优先处理 AE_READABLE 事件， 等到 AE_READABLE 事件处理完之后， 才处理 AE_WRITABLE 事件。换句话说， 如果一个Socket又可读又可写的话， 那么服务器将先读Socket， 后写Socket。</p>
 <h3 id="Java-NIO-Selector"><a href="#Java-NIO-Selector" class="headerlink" title="Java NIO Selector"></a>Java NIO Selector</h3><p>Java中也有I/O多路复用的方式，例子为NIO的<code>Selector</code>。<br><code>selector</code>的创建方式为调用<code>Selector</code>类的静态方法，由<code>SelectorProvider</code>提供：<code>Selector selector = Selector.open();</code></p>
 <pre><code class="java">public static Selector open() throws IOException &#123;
     return SelectorProvider.provider().openSelector();
-&#125;</code></pre>
+&#125;
+</code></pre>
 <p><code>SelectorProvider</code>是单例模式，Linux默认提供<code>EPollSelectorProvider</code>，即提供的Selector为<code>EPollSelectorImpl</code>。</p>
 <pre><code class="java">public static SelectorProvider provider() &#123;
     synchronized (lock) &#123;
@@ -479,7 +485,8 @@ public static SelectorProvider create() &#123;
     if (osname.equals(&quot;Linux&quot;))
         return createProvider(&quot;sun.nio.ch.EPollSelectorProvider&quot;);
     return new sun.nio.ch.PollSelectorProvider();
-&#125;</code></pre>
+&#125;
+</code></pre>
 <p>调用系统Epoll方法的地方在<code>EPollArrayWrapper</code>类的<code>poll</code>方法中，该类由<code>EPollSelectorImpl</code>持有：</p>
 <pre><code class="java">int poll(long timeout) throws IOException &#123;
     updateRegistrations();
@@ -492,12 +499,14 @@ public static SelectorProvider create() &#123;
         &#125;
     &#125;
     return updated;
-&#125;</code></pre>
+&#125;
+</code></pre>
 <p><code>Selector</code>使用中需要绑定<code>Channel</code>。以<code>ServerSocketChannel</code>为例：</p>
 <pre><code class="java">ServerSocketChannel serverSocket = ServerSocketChannel.open();
 serverSocket.bind(new InetSocketAddress(&quot;localhost&quot;, 5454));
 serverSocket.configureBlocking(false);
-serverSocket.register(selector, SelectionKey.OP_ACCEPT);</code></pre>
+serverSocket.register(selector, SelectionKey.OP_ACCEPT);
+</code></pre>
 <p>注册时会调用<code>Selector</code>的回调方法<code>register</code>，生成<code>SelectionKey</code>。</p>
 <pre><code class="java">protected final SelectionKey register(AbstractSelectableChannel ch,
                                       int ops,
@@ -512,7 +521,8 @@ serverSocket.register(selector, SelectionKey.OP_ACCEPT);</code></pre>
     &#125;
     k.interestOps(ops);
     return k;
-&#125;</code></pre>
+&#125;
+</code></pre>
 <p>最后在使用时根据<code>SelectionKeys</code>遍历查看状态。可以通过监听的事件有：</p>
 <ul>
 <li>Connect – OP_CONNECT client尝试连接</li>
@@ -538,7 +548,8 @@ serverSocket.register(selector, SelectionKey.OP_ACCEPT);</code></pre>
         &#125;
         iter.remove();
     &#125;
-&#125;</code></pre>
+&#125;
+</code></pre>
 <p><code>Selector</code>的wakeup()方法主要作用是解除阻塞在Selector.select()/select(long)上的线程，立即返回，调用了本地的中断方法。可以在注册了新的channel或者事件、channel关闭，取消注册时使用，或者优先级更高的事件触发（如定时器事件），希望及时处理。</p>
 <p>通过NIO的I/O多路复用方式可以节约线程资源，提高网络I/O效率。</p>
 <h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><ul>
