@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>6.824 Lab2 - Raft - Lab前准备 | Hexo</title>
+  <meta name="description" content="做lab前先整理一下要点和课前提醒，做一个笔记记录。 Raft概述Raft是一个用来实现分布式一致的协议。Raft is a protocol for implementing distributed consensus. Raft is a consensus algorithm that is designed to be easy to understand.  It’s equivalen">
+<meta property="og:type" content="article">
+<meta property="og:title" content="6.824 Lab2 - Raft - Lab前准备">
+<meta property="og:url" content="https://juniousy.github.io/2022/06/12/2022/6.824Lab2-Lab%E5%89%8D%E5%87%86%E5%A4%87/index.html">
+<meta property="og:site_name" content="JuniousY的博客">
+<meta property="og:description" content="做lab前先整理一下要点和课前提醒，做一个笔记记录。 Raft概述Raft是一个用来实现分布式一致的协议。Raft is a protocol for implementing distributed consensus. Raft is a consensus algorithm that is designed to be easy to understand.  It’s equivalen">
+<meta property="og:locale">
+<meta property="og:image" content="https://juniousy.github.io/2022/06/12/2022/6.824Lab2-Lab%E5%89%8D%E5%87%86%E5%A4%87/raft.png">
+<meta property="og:image" content="https://juniousy.github.io/2022/06/12/2022/6.824Lab2-Lab%E5%89%8D%E5%87%86%E5%A4%87/raft-lc.png">
+<meta property="article:published_time" content="2022-06-12T06:58:41.090Z">
+<meta property="article:modified_time" content="2022-06-12T07:40:58.439Z">
+<meta property="article:author" content="JuniousY">
+<meta property="article:tag" content="distributed system">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://juniousy.github.io/2022/06/12/2022/6.824Lab2-Lab%E5%89%8D%E5%87%86%E5%A4%87/raft.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://juniousy.github.io/2022/06/12/2022/6.824Lab2-Lab%E5%89%8D%E5%87%86%E5%A4%87/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="JuniousY的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/JuniousY" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">JuniousY</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">后端程序员</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Shanghai, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">Categories</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/JuniousY" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Lab/">Lab</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%B7%E9%A2%98/">刷题</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%BC%80%E5%8F%91/">开发</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9D%82%E8%B0%88/">杂谈</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/distributed-system/" rel="tag">distributed system</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B9%B6%E5%8F%91/" rel="tag">并发</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%82%E8%B0%88/" rel="tag">杂谈</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/Java/" style="font-size: 14px;">Java</a> <a href="/tags/Redis/" style="font-size: 13.33px;">Redis</a> <a href="/tags/distributed-system/" style="font-size: 13.33px;">distributed system</a> <a href="/tags/%E5%B9%B6%E5%8F%91/" style="font-size: 13.67px;">并发</a> <a href="/tags/%E6%9D%82%E8%B0%88/" style="font-size: 13px;">杂谈</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.33px;">算法</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Archive</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">June 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">May 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a><span class="archive-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Lab/">Lab</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/06/12/2022/6.824Lab2-Lab%E5%89%8D%E5%87%86%E5%A4%87/" class="title">6.824 Lab2 - Raft - Lab前准备</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-06-12T06:58:41.090Z" itemprop="datePublished">2022-06-12</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Lab/">Lab</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/05/30/2022/6.824Lab1/" class="title">6.824 Lab1 - Map Reduce</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-05-30T12:00:00.000Z" itemprop="datePublished">2022-05-30</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%9D%82%E8%B0%88/">杂谈</a>
+              </p>
+              <p class="item-title">
+                <a href="/2021/01/29/%E5%AD%98%E6%A1%A3/%E6%9C%AC%E7%A7%91%E5%90%8E%E8%87%B3%E4%BB%8A%EF%BC%88%E4%B8%80%E5%B9%B4%E5%8D%8A%EF%BC%89%E7%9A%84%E4%B8%80%E7%82%B9%E7%82%B9%E6%84%9F%E6%83%B3/" class="title">本科后至今（一年半）的一点点感想</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-01-29T13:00:00.000Z" itemprop="datePublished">2021-01-29</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%BC%80%E5%8F%91/">开发</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/06/14/%E5%AD%98%E6%A1%A3/Java-%E5%90%8C%E6%AD%A5%E5%99%A8%E6%A0%B8%E5%BF%83AQS/" class="title">【本科时期文章】Java 同步器核心AQS</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-06-14T03:27:12.000Z" itemprop="datePublished">2019-06-14</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%BC%80%E5%8F%91/">开发</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/06/05/%E5%AD%98%E6%A1%A3/Redis%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%BC%96%E7%A0%81/" class="title">【本科时期文章】Redis的数据结构与编码</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-06-05T07:42:40.000Z" itemprop="datePublished">2019-06-05</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-2022/6.824Lab2-Lab前准备" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      6.824 Lab2 - Raft - Lab前准备
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/06/12/2022/6.824Lab2-Lab%E5%89%8D%E5%87%86%E5%A4%87/" class="article-date">
+	  <time datetime="2022-06-12T06:58:41.090Z" itemprop="datePublished">2022-06-12</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/Lab/">Lab</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/distributed-system/" rel="tag">distributed system</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/06/12/2022/6.824Lab2-Lab%E5%89%8D%E5%87%86%E5%A4%87/#comments" class="article-comment-link">Comments</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 2.3k(words)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 9(minutes)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>做lab前先整理一下要点和课前提醒，做一个笔记记录。</p>
+<h1 id="Raft概述"><a href="#Raft概述" class="headerlink" title="Raft概述"></a>Raft概述</h1><p>Raft是一个用来实现分布式一致的协议。Raft is a protocol for implementing distributed consensus.</p>
+<pre><code class="text">Raft is a consensus algorithm that is designed to be easy to understand. 
+It’s equivalent to Paxos in fault-tolerance and performance. 
+The difference is that it’s decomposed into relatively independent subproblems, and it cleanly addresses all major pieces needed for practical systems. 
+We hope Raft will make consensus available to a wider audience, and that this wider audience will be able to develop a variety of higher quality consensus-based systems than are available today.</code></pre>
+<p>主要分为Lead Election和Log Replication阶段</p>
+<h4 id="Log-Replication-阶段流程概述："><a href="#Log-Replication-阶段流程概述：" class="headerlink" title="Log Replication 阶段流程概述："></a>Log Replication 阶段流程概述：</h4><ul>
+<li>为了commit the log entry，leader node首先向follower nodes复制自己</li>
+<li>leader等待大部分node写入entry</li>
+<li>entry 提交，leader status改变</li>
+<li>leader 通知followers entry已经提交了</li>
+<li>cluster 的系统状态成为一致(consensus)</li>
+</ul>
+<h4 id="Lead-Election-阶段流程概述："><a href="#Lead-Election-阶段流程概述：" class="headerlink" title="Lead Election 阶段流程概述："></a>Lead Election 阶段流程概述：</h4><ul>
+<li>election timeout：时间结束后，follower变为candidate，发起election，发送request vote</li>
+<li>candidate 被大部分note vote后，变为leader</li>
+<li>leader向followers发送Append Entries，按 heartbeat timeout 间歇发送</li>
+<li>follower也向leaderAppend Entries，作为心跳检测</li>
+<li>同时有两个candidate，就重新进入election timeout等待，重新发起election</li>
+</ul>
+<h1 id="Raft精要"><a href="#Raft精要" class="headerlink" title="Raft精要"></a>Raft精要</h1><p>内容是论文中的Figure 2。</p>
+<p><img src="raft.png"></p>
+<h3 id="State"><a href="#State" class="headerlink" title="State"></a>State</h3><p>关于服务器状态的实现</p>
+<h4 id="所有服务器-持久化状态"><a href="#所有服务器-持久化状态" class="headerlink" title="所有服务器 - 持久化状态"></a>所有服务器 - 持久化状态</h4><p>在进行RPC回复前进行持久化</p>
+<ul>
+<li><strong>currentTerm</strong> 最近server看到的term （0开始，单调增）</li>
+<li><strong>voteFor</strong> 当前term下被推举的candidate Id</li>
+<li><strong>log[]</strong> log entries （记录条目）。每个entry包含状态机指令，和收到leader发出的entry时的term（起始值为1）</li>
+</ul>
+<h4 id="所有服务器-可变状态"><a href="#所有服务器-可变状态" class="headerlink" title="所有服务器 - 可变状态"></a>所有服务器 - 可变状态</h4><ul>
+<li><strong>commitIndex</strong> 最近一次被提交的log entry序号（0开始，单调增）</li>
+<li><strong>lastApplied</strong> 最近一次被应用的log entry序号（0开始，单调增）</li>
+</ul>
+<h4 id="leaders-可变状态"><a href="#leaders-可变状态" class="headerlink" title="leaders - 可变状态"></a>leaders - 可变状态</h4><p>选举后重新初始化</p>
+<ul>
+<li><strong>nextIndex[]</strong> 对每个server，最近发送的log entry序号（原index+1）</li>
+<li><strong>matchIndex[]</strong> 对每个server，最近知晓的复制成功的log entry序号</li>
+</ul>
+<h3 id="AppendEntries-RPC"><a href="#AppendEntries-RPC" class="headerlink" title="AppendEntries RPC"></a>AppendEntries RPC</h3><p>功能为复制log entries和心跳检测</p>
+<h4 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h4><ul>
+<li><strong>term</strong> leader的term</li>
+<li><strong>leaderId</strong> </li>
+<li><strong>prevLogIndex</strong> </li>
+<li><strong>preLogTerm</strong></li>
+<li><strong>entries</strong> 要存的log entries （空为心跳；可能一次传多个）</li>
+<li><strong>leaderCommit</strong> leader的commitIndex</li>
+</ul>
+<h4 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h4><ul>
+<li><strong>term</strong> currentTerm，leader用来更新自己</li>
+<li><strong>success</strong> 成功时，表示follower包含符合prevLogIndex和preLogTerm的entry</li>
+</ul>
+<h4 id="Receiver实现"><a href="#Receiver实现" class="headerlink" title="Receiver实现"></a>Receiver实现</h4><ol>
+<li>如果 term &lt; currentTerm , 返回false</li>
+<li>如果 prevLogIndex处的entry不匹配preLogTerm，返回false</li>
+<li>如果现有的entry和新的冲突（index一样但是term不一样），从这个entry开始删除到最新。</li>
+<li>插入新的entries</li>
+<li>如果 leaderCommit &gt; commitIndex，设置 commitIndex = min(leaderCommit, 最新entry的序号)</li>
+</ol>
+<h3 id="RequestVote-RPC"><a href="#RequestVote-RPC" class="headerlink" title="RequestVote RPC"></a>RequestVote RPC</h3><p>candidate收集选票时触发</p>
+<h4 id="参数-1"><a href="#参数-1" class="headerlink" title="参数"></a>参数</h4><ul>
+<li><strong>term</strong> candidate的term</li>
+<li><strong>candidateId</strong> </li>
+<li><strong>lastLogIndex</strong> candidate最后一个log entry的序号</li>
+<li><strong>lastLogTerm</strong> candidate最后一个log entry的term</li>
+</ul>
+<h4 id="结果-1"><a href="#结果-1" class="headerlink" title="结果"></a>结果</h4><ul>
+<li><strong>term</strong> 当前term</li>
+<li><strong>voteGranted</strong> true表示投一票</li>
+</ul>
+<h4 id="Receiver实现-1"><a href="#Receiver实现-1" class="headerlink" title="Receiver实现"></a>Receiver实现</h4><ol>
+<li>如果term &lt; currentTerm 返回false</li>
+<li>如果votedFor是空或者是candidateId，然后candidate的log和receiver的log比不滞后，就投票同意</li>
+</ol>
+<h3 id="Servers的实现规则"><a href="#Servers的实现规则" class="headerlink" title="Servers的实现规则"></a>Servers的实现规则</h3><h4 id="所有servers"><a href="#所有servers" class="headerlink" title="所有servers"></a>所有servers</h4><ul>
+<li>如果 commitIndex &gt; lastApplied：lastApplied+1，将log[lastApplied]应用到状态机中</li>
+<li>如果RPC请求或返回包含 term T &gt; currentTerm：将currentTerm设为T，自己转为follower</li>
+</ul>
+<h4 id="Followers"><a href="#Followers" class="headerlink" title="Followers"></a>Followers</h4><ul>
+<li>向candidates和leaders的RPC回复</li>
+<li>如果election timeout到了之后，没有收到leader的AppendEntries RPC或收到candidate的投票请求，就自己转为candidate</li>
+</ul>
+<h4 id="Candidates"><a href="#Candidates" class="headerlink" title="Candidates"></a>Candidates</h4><ul>
+<li>转变成candidate，发起选举<ul>
+<li>currentTerm + 1</li>
+<li>投自己一票</li>
+<li>重设election timer</li>
+<li>向所有其他服务发送RequestVote RPC</li>
+</ul>
+</li>
+<li>如果得到大部分服务的投票，成为leader</li>
+<li>如果收到新leader的AppendEntries RPC，成为follower</li>
+<li>如果election timeout到了，开始新选举</li>
+</ul>
+<h4 id="Leaders"><a href="#Leaders" class="headerlink" title="Leaders"></a>Leaders</h4><ul>
+<li>选举一旦完成，向各服务发送新的初始化空AppendEntries RPC（心跳），空闲时也重复发送</li>
+<li>如果收到client的命令：在本地log中新增entry，在状态机上应用entry后返回</li>
+<li>如果最近的log序号 &gt;= nextIndex，发送AppendExtries RPC时用nextIndex<ul>
+<li>如果成功：为follower更新nextIndex和matchIndex</li>
+<li>如果失败，那么原因为log不一致，降低nextIndex重试</li>
+</ul>
+</li>
+<li>如果存在 N，N &gt; commitIndex，大部分matchIndex[i] &gt;= N，log[N].term == currentTerm，那么，就设置commitIndex = N</li>
+</ul>
+<h1 id="注意要点"><a href="#注意要点" class="headerlink" title="注意要点"></a>注意要点</h1><p>课程提醒的实现中需要注意的点，一个是Figure 2上的要点要逐一实现，如接受非heart beat AppendEntries 时也要进行相应的检查等；第二个是归纳了四种常见的bug。</p>
+<h4 id="Bugs"><a href="#Bugs" class="headerlink" title="Bugs"></a>Bugs</h4><h5 id="live-locks-活锁"><a href="#live-locks-活锁" class="headerlink" title="live locks - 活锁"></a>live locks - 活锁</h5><ol>
+<li>需要妥善处理好重设election timer。如果AppendEntries已经过时了，就不要重设计时器。开始发起选举时要重设。给其他节点投票时要重设，而不是每次收到投票请求时重设(这样有更多最近记录的节点更有可能选上)。</li>
+<li>如果是candidate正在发起选举，但是自己的election timer到时间了，那么就应该开始新的一次选举</li>
+<li>如果已经给出投票，然后有新的RequestVote RPC有更高的term，那应该启用这个term，然后处理RPC</li>
+</ol>
+<h5 id="Incorrect-RPC-handlers-错误的PRC处理"><a href="#Incorrect-RPC-handlers-错误的PRC处理" class="headerlink" title="Incorrect RPC handlers - 错误的PRC处理"></a>Incorrect RPC handlers - 错误的PRC处理</h5><ul>
+<li>Figure 2要点中说的“返回false”，意思是立即返回</li>
+<li>如果一个AppendEntries RPC的prevLogIndex比最近的log index要早，那该当做有这个entry但是term不匹配来处理（如返回false）</li>
+<li>对prevLogIndex的检查处理，在leader没有送出entries时也要处理</li>
+<li>leader的commit index大过自身commit index时，要更新为min(leaderCommit, 最新entry的序号)。如果直接改为leaderCommit，会遇到应用错误的entries的情况。</li>
+<li>严格按照要求处理“up-to-date log”。Raft判断的两个log哪个最up-to-date，是通过比较Index和logs中最后的entries的term。如果term最新，那么有最新term的log最up-to-date。如果term一样，那么哪个log的长度（entries的数量）最长就算最up-to-date。</li>
+</ul>
+<h5 id="Failure-to-follow-The-Rules-没有正确遵守规则"><a href="#Failure-to-follow-The-Rules-没有正确遵守规则" class="headerlink" title="Failure to follow The Rules - 没有正确遵守规则"></a>Failure to follow The Rules - 没有正确遵守规则</h5><p>Figure 2. 外补充的要点</p>
+<ul>
+<li>任何时候发现commitIndex &gt; lastApplied，应该应用一条log entry到状态机。apply要保证只有一个地方去执行。具体来说，要么有一个专门的applier，要么在apply时加锁。</li>
+<li>检查commitIndex &gt; lastApplied要么周期性，要么在commitIndex更新之后。</li>
+<li>如果leader发出AppendEntries RPC被拒绝时，如果不是因为log不一致，那么应该立即退出，不更新nextIndex。</li>
+<li>leader 不能让其他节点在过时的term中更新commitIndex。因此要判断log[N].term == currentTerm。</li>
+<li>matchIndex和nextIndex的关系不单纯是matchIndex = nextIndex - 1。nextIndex只是一种乐观的猜测。matchIndex是安全保障，用来做判断。</li>
+</ul>
+<h5 id="Term-Confusion-term混乱"><a href="#Term-Confusion-term混乱" class="headerlink" title="Term Confusion - term混乱"></a>Term Confusion - term混乱</h5><p>在收到旧term的RPC返回时，只在当前term和请求时的term一致时，处理该PRC返回。</p>
+<p>更新matchIndex正确的操作是设置为prevLogIndex + len(entries[])，这里面的参数是发起请求时的值。</p>
+<h4 id="额外的功能"><a href="#额外的功能" class="headerlink" title="额外的功能"></a>额外的功能</h4><p>这门课除了核心功能，还要求实现log压缩（section 7），快速log回溯（第8页左上方）。</p>
+<h5 id="log压缩"><a href="#log压缩" class="headerlink" title="log压缩"></a>log压缩</h5><p>主要看Figure 13。</p>
+<p><img src="raft-lc.png"></p>
+<p>leader发送表示一个snapshot的多个chunk的方式</p>
+<h4 id="参数-2"><a href="#参数-2" class="headerlink" title="参数"></a>参数</h4><ul>
+<li><strong>term</strong> leader的term</li>
+<li><strong>leaderId</strong></li>
+<li><strong>lastIncludedIndex</strong> </li>
+<li><strong>lastIncludedTerm</strong></li>
+<li><strong>offset</strong> chunk在snapshot文件中的byte位置偏移量</li>
+<li><strong>data[]</strong> snapshot chunk 的原始数据，从offset开始</li>
+<li><strong>done</strong> true表示为最后一个chunk</li>
+</ul>
+<h4 id="结果-2"><a href="#结果-2" class="headerlink" title="结果"></a>结果</h4><ul>
+<li><strong>term</strong> 当前term</li>
+</ul>
+<h4 id="Receiver-Implementation"><a href="#Receiver-Implementation" class="headerlink" title="Receiver Implementation"></a>Receiver Implementation</h4><ol>
+<li>如果 term &lt; currentTerm，立即返回</li>
+<li>第一个chunk时新建snapshot文件</li>
+<li>在给的offset处写入文件</li>
+<li>如果done是false，返回并等待更多chunk</li>
+<li>保存snapshot文件，其他snapshot文件如果有更小的index，就丢弃</li>
+<li>如果已有的log entry和snapshot的最后一个entry有同样的index和term，保留这之后的log entries</li>
+<li>丢弃整个log</li>
+<li>用snapshot内容重设状态机</li>
+</ol>
+<p>注意事项：</p>
+<ul>
+<li>在做snapshot时，应用的状态应该对设计raft log中已经有index应用过的状态。也就是说，要么知道snapshot对应的index，要么raft在完成snapshot前不应用新的log entries。</li>
+<li>状态和snapshot提交是分开的，所以在此两者之间的崩溃会导致问题，因为此时被snapshot覆盖的log已经丢弃了。解决办法是记录真实的Raft持久化日志第一条内容的index。</li>
+</ul>
+<h5 id="快速log回溯"><a href="#快速log回溯" class="headerlink" title="快速log回溯"></a>快速log回溯</h5><ul>
+<li>如果follower在log中没有prevLogIndex，那么应该返回conflictIndex = len(log)和conflictTerm = None</li>
+<li>如果follower在log中有prevLogIndex，但是term对不上，那么返回值conflictTerm = log[prevLogIndex].Term，然后找第一个entry的term等于conflictTerm，回溯到这个index</li>
+<li>收到冲突返回时，leader应该在log中搜索conflictTerm。如果找到了，就把nextIndex设为这个term最后的index之前的那个index。（这句话没看懂，原文If it finds an entry in its log with that term, it should set nextIndex to be the one beyond the index of the last entry in that term in its log.）</li>
+<li>接上条，如果没有找到，设置nextIndex = conflictIndex</li>
+</ul>
+<h4 id="应用Raft时的注意点"><a href="#应用Raft时的注意点" class="headerlink" title="应用Raft时的注意点"></a>应用Raft时的注意点</h4><h5 id="Applying-client-operations-应用操作"><a href="#Applying-client-operations-应用操作" class="headerlink" title="Applying client operations - 应用操作"></a>Applying client operations - 应用操作</h5><p>服务应该被设计为一个状态机。需要有一个循环去接受用户的操作，和将用户的操作按顺序应用到状态机。这个循环是唯一一处能接触到状态机的地方。</p>
+<p>如何知道用户的请求已经完成？在用户操作时，记录当前log的index，一旦在那个index处的操作被标记为已应用，看该处的操作是不是当时的操作，是表示操作成功，否表示操作失败。</p>
+<h5 id="Duplicate-detection-重复检测"><a href="#Duplicate-detection-重复检测" class="headerlink" title="Duplicate detection - 重复检测"></a>Duplicate detection - 重复检测</h5><p>防止应用两次：每个client有一个id，每次请求有一个单调增id。如果相同clinet的相同请求id已经处理过了，就忽略。</p>
+<h5 id="其他问题"><a href="#其他问题" class="headerlink" title="其他问题"></a>其他问题</h5><p>重复Index，死锁</p>
+<h1 id="附录："><a href="#附录：" class="headerlink" title="附录："></a>附录：</h1><ul>
+<li><a target="_blank" rel="noopener" href="http://nil.csail.mit.edu/6.824/2020/papers/raft-extended.pdf">In Search of an Understandable Consensus Algorithm<br>(Extended Version)</a></li>
+<li><a target="_blank" rel="noopener" href="https://thesquareplanet.com/blog/students-guide-to-raft/">Students’ Guide to Raft</a></li>
+</ul>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://juniousy.github.io/2022/06/12/2022/6.824Lab2-Lab%E5%89%8D%E5%87%86%E5%A4%87/" title="6.824 Lab2 - Raft - Lab前准备" target="_blank" rel="external">https://juniousy.github.io/2022/06/12/2022/6.824Lab2-Lab前准备/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/JuniousY" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/JuniousY" target="_blank"><span class="text-dark">JuniousY</span><small class="ml-1x">后端程序员</small></a></h3>
+        <div>倾听GHOST的低语。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    
+    <li class="next">
+      <a href="/2022/05/30/2022/6.824Lab1/" title="6.824 Lab1 - Map Reduce"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,twitter" data-mobile-sites="weibo,qq"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/JuniousY" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+
+
+    <!-- Highlight.js -->
+    <link rel="stylesheet" href="//cdn.bootcss.com/highlight.js/11.5.1/styles/github.min.css">
+    <script src="//cdn.bootcss.com/highlight.js/11.5.1/highlight.min.js">
+    </script>
+    <script>
+        hljs.highlightAll();
+    </script>
+
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+
+
+
+
+
+
+</body>
+</html>
