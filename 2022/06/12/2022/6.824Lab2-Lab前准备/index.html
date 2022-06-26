@@ -18,17 +18,17 @@
   
   
   <title>6.824 Lab2 - Raft - Lab前准备 | Hexo</title>
-  <meta name="description" content="做lab前先整理一下要点和课前提醒，做一个笔记记录，在实现时对照着看。 Raft概述Raft是一个用来实现分布式一致的协议。Raft is a protocol for implementing distributed consensus. Raft is a consensus algorithm that is designed to be easy to understand.  It’s">
+  <meta name="description" content="做lab前先整理一下要点和课前提醒，做一个笔记记录，可跳过，主要在实现时对照着看。 Raft概述Raft是一个用来实现分布式一致的协议。Raft is a protocol for implementing distributed consensus. Raft is a consensus algorithm that is designed to be easy to understand.">
 <meta property="og:type" content="article">
 <meta property="og:title" content="6.824 Lab2 - Raft - Lab前准备">
 <meta property="og:url" content="https://juniousy.github.io/2022/06/12/2022/6.824Lab2-Lab%E5%89%8D%E5%87%86%E5%A4%87/index.html">
 <meta property="og:site_name" content="JuniousY的博客">
-<meta property="og:description" content="做lab前先整理一下要点和课前提醒，做一个笔记记录，在实现时对照着看。 Raft概述Raft是一个用来实现分布式一致的协议。Raft is a protocol for implementing distributed consensus. Raft is a consensus algorithm that is designed to be easy to understand.  It’s">
+<meta property="og:description" content="做lab前先整理一下要点和课前提醒，做一个笔记记录，可跳过，主要在实现时对照着看。 Raft概述Raft是一个用来实现分布式一致的协议。Raft is a protocol for implementing distributed consensus. Raft is a consensus algorithm that is designed to be easy to understand.">
 <meta property="og:locale">
 <meta property="og:image" content="https://juniousy.github.io/2022/06/12/2022/6.824Lab2-Lab%E5%89%8D%E5%87%86%E5%A4%87/raft.png">
 <meta property="og:image" content="https://juniousy.github.io/2022/06/12/2022/6.824Lab2-Lab%E5%89%8D%E5%87%86%E5%A4%87/raft-lc.png">
 <meta property="article:published_time" content="2022-06-12T06:58:41.090Z">
-<meta property="article:modified_time" content="2022-06-12T07:58:50.996Z">
+<meta property="article:modified_time" content="2022-06-26T02:18:14.740Z">
 <meta property="article:author" content="JuniousY">
 <meta property="article:tag" content="distributed system">
 <meta name="twitter:card" content="summary">
@@ -350,7 +350,7 @@
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
       
-        <p>做lab前先整理一下要点和课前提醒，做一个笔记记录，在实现时对照着看。</p>
+        <p>做lab前先整理一下要点和课前提醒，做一个笔记记录，可跳过，主要在实现时对照着看。</p>
 <h1 id="Raft概述"><a href="#Raft概述" class="headerlink" title="Raft概述"></a>Raft概述</h1><p>Raft是一个用来实现分布式一致的协议。Raft is a protocol for implementing distributed consensus.</p>
 <pre><code class="text">Raft is a consensus algorithm that is designed to be easy to understand. 
 It’s equivalent to Paxos in fault-tolerance and performance. 
@@ -395,17 +395,17 @@ We hope Raft will make consensus available to a wider audience, and that this wi
 <li><strong>term</strong> leader的term</li>
 <li><strong>leaderId</strong> </li>
 <li><strong>prevLogIndex</strong> </li>
-<li><strong>preLogTerm</strong></li>
+<li><strong>prevLogTerm</strong></li>
 <li><strong>entries</strong> 要存的log entries （空为心跳；可能一次传多个）</li>
 <li><strong>leaderCommit</strong> leader的commitIndex</li>
 </ul>
 <h4 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h4><ul>
 <li><strong>term</strong> currentTerm，leader用来更新自己</li>
-<li><strong>success</strong> 成功时，表示follower包含符合prevLogIndex和preLogTerm的entry</li>
+<li><strong>success</strong> 成功时，表示follower包含符合prevLogIndex和prevLogTerm的entry</li>
 </ul>
 <h4 id="Receiver实现"><a href="#Receiver实现" class="headerlink" title="Receiver实现"></a>Receiver实现</h4><ol>
 <li>如果 term &lt; currentTerm , 返回false</li>
-<li>如果 prevLogIndex处的entry不匹配preLogTerm，返回false</li>
+<li>如果 prevLogIndex处的entry不匹配prevLogTerm，返回false</li>
 <li>如果现有的entry和新的冲突（index一样但是term不一样），从这个entry开始删除到最新。</li>
 <li>插入新的entries</li>
 <li>如果 leaderCommit &gt; commitIndex，设置 commitIndex = min(leaderCommit, 最新entry的序号)</li>
