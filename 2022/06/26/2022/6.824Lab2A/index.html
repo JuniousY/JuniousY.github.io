@@ -17,19 +17,21 @@
   <meta http-equiv="window-target" content="_top" />
   
   
-  <title>Category: Lab | Hexo</title>
-  <meta name="description" content="后端开发,请多多指教">
-<meta property="og:type" content="website">
-<meta property="og:title" content="JuniousY的博客">
-<meta property="og:url" content="https://juniousy.github.io/categories/Lab/index.html">
+  <title>6.824 Lab2A | Hexo</title>
+  <meta name="description" content="光看记录的一些笔记和要点确实有点一头雾水，不知道从何下手，好在Lab分阶段进行，先从最基本的地方开始。2A的测试，一个是正常情况下选举出leader，另一个是模拟leader宕机后重新选举。完成记录如下： GO111MODULE&#x3D;off go test -v -run 2A    2022&#x2F;06&#x2F;26 14:41:54 server 0 成为 follower，currentTerm 0 &#x3D;&#x3D;&amp;g">
+<meta property="og:type" content="article">
+<meta property="og:title" content="6.824 Lab2A">
+<meta property="og:url" content="https://juniousy.github.io/2022/06/26/2022/6.824Lab2A/index.html">
 <meta property="og:site_name" content="JuniousY的博客">
-<meta property="og:description" content="后端开发,请多多指教">
+<meta property="og:description" content="光看记录的一些笔记和要点确实有点一头雾水，不知道从何下手，好在Lab分阶段进行，先从最基本的地方开始。2A的测试，一个是正常情况下选举出leader，另一个是模拟leader宕机后重新选举。完成记录如下： GO111MODULE&#x3D;off go test -v -run 2A    2022&#x2F;06&#x2F;26 14:41:54 server 0 成为 follower，currentTerm 0 &#x3D;&#x3D;&amp;g">
 <meta property="og:locale">
+<meta property="article:published_time" content="2022-06-26T06:43:32.540Z">
+<meta property="article:modified_time" content="2022-06-26T16:40:04.753Z">
 <meta property="article:author" content="JuniousY">
-<meta property="article:tag" content="个人博客,java,程序员,开发,后端">
+<meta property="article:tag" content="distributed system">
 <meta name="twitter:card" content="summary">
   <!-- Canonical links -->
-  <link rel="canonical" href="https://juniousy.github.io/categories/Lab/index.html">
+  <link rel="canonical" href="https://juniousy.github.io/2022/06/26/2022/6.824Lab2A/index.html">
   
     <link rel="alternate" href="/atom.xml" title="JuniousY的博客" type="application/atom+xml">
   
@@ -295,71 +297,206 @@
 </aside>
 
   
-  <main class="main" role="main">
-  <article class="content article article-categories article-type-list" itemscope="">
-    <header class="article-header">
-      <h1 itemprop="name" class="hidden-xs">Category: Lab</h1>
-      <p class="hidden-xs">Total 3 articles</p>
-      <nav role="navigation" id="nav-main" class="okayNav">
-        <ul>
-          <li><a href="/categories">All</a></li>
-          
-          <li><a href="/categories/Lab/">Lab</a></li>
-          
-          <li><a href="/categories/开发/">开发</a></li>
-          
-          <li><a href="/categories/刷题/">刷题</a></li>
-          
-        </ul>
-      </nav>
-    </header>
-    <!-- /header -->
-    <div class="article-body">
-      <div class="panel panel-default b-no">
-    <div class="panel-heading" role="tab">
-        <h4 class="panel-title">
-            <a data-toggle="collapse" href="#collapseLab" aria-expanded="true">
-              <i class="icon icon-folder text-active"></i><i class="icon icon-folder-open text"></i>
-              Lab
-            </a>
-            <small class="text-muted">(Total 3 articles)</small>
-        </h4>
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-2022/6.824Lab2A" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      6.824 Lab2A
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/06/26/2022/6.824Lab2A/" class="article-date">
+	  <time datetime="2022-06-26T06:43:32.540Z" itemprop="datePublished">2022-06-26</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/Lab/">Lab</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/distributed-system/" rel="tag">distributed system</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/06/26/2022/6.824Lab2A/#comments" class="article-comment-link">Comments</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 1k(words)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 4(minutes)</span>
+	
+
+      </div>
     </div>
-    <div id="collapseLab" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingLab">
-        <div class="panel-body">
-            <div class="collection">
-              
-                
-<a href="/2022/06/26/2022/6.824Lab2A/" class="collection-item"   itemprop="url">
-  <time datetime="2022-06-26T06:43:32.540Z" itemprop="datePublished">2022-06-26</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 6.824 Lab2A
-</a>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>光看记录的一些笔记和要点确实有点一头雾水，不知道从何下手，好在Lab分阶段进行，先从最基本的地方开始。2A的测试，一个是正常情况下选举出leader，另一个是模拟leader宕机后重新选举。完成记录如下：</p>
+<pre><code class="text">GO111MODULE=off go test -v -run 2A
 
 
-              
-                
-<a href="/2022/06/12/2022/6.824Lab2-Lab%E5%89%8D%E5%87%86%E5%A4%87/" class="collection-item"   itemprop="url">
-  <time datetime="2022-06-12T06:58:41.090Z" itemprop="datePublished">2022-06-12</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 6.824 Lab2 - Raft - Lab前准备
-</a>
+
+2022/06/26 14:41:54 server 0 成为 follower，currentTerm 0 ==&gt; 0, leader id 0 ==&gt; -1
+2022/06/26 14:41:54 server 1 成为 follower，currentTerm 0 ==&gt; 0, leader id 0 ==&gt; -1
+2022/06/26 14:41:54 server 2 成为 follower，currentTerm 0 ==&gt; 0, leader id 0 ==&gt; -1
+Test (2A): initial election ...
+2022/06/26 14:41:55 server 2 成为 candidate, currentTerm 1
+2022/06/26 14:41:55 === Candidate 2 开始发送 RequestVote, currentTerm 1 ===
+2022/06/26 14:41:55 server 0 (term 0 voteFor -1) 收到 candidiate 2 (term 1 candidateId 2) 的RequestVote
+2022/06/26 14:41:55 server 0 投票给 server 2
+2022/06/26 14:41:55 server 1 (term 0 voteFor -1) 收到 candidiate 2 (term 1 candidateId 2) 的RequestVote
+2022/06/26 14:41:55 server 1 投票给 server 2
+2022/06/26 14:41:55 server 2 成为 leader, currentTerm 1
+...
+    ... Passed --   3.1  3   52   12924    0
+--- PASS: TestInitialElection2A (3.07s)
 
 
-              
-                
-<a href="/2022/05/30/2022/6.824Lab1/" class="collection-item"   itemprop="url">
-  <time datetime="2022-05-30T12:00:00.000Z" itemprop="datePublished">2022-05-30</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 6.824 Lab1 - Map Reduce
-</a>
+...
+2022/06/26 14:41:59 === Leader 1 开始发送 AppendEntries ===
+2022/06/26 14:41:59 === server 2 收到来自 Leader 1 的 AppendEntries ===
+2022/06/26 14:41:59 === server 0 收到来自 Leader 1 的 AppendEntries ===
+...
+2022/06/26 14:42:01 === Leader 1 开始发送 AppendEntries ===
+2022/06/26 14:42:01 server 2 成为 candidate, currentTerm 10
+2022/06/26 14:42:01 === Candidate 2 开始发送 RequestVote, currentTerm 10 ===
+2022/06/26 14:42:01 server 0 (term 7 voteFor 0) 收到 candidiate 2 (term 10 candidateId 2) 的RequestVote
+2022/06/26 14:42:01 server 0 成为 follower，currentTerm 7 ==&gt; 10, leader id 0 ==&gt; -1
+2022/06/26 14:42:01 server 0 投票给 server 2
+2022/06/26 14:42:01 server 2 成为 leader, currentTerm 10
+...
+    ... Passed --   4.5  3  100   17870    0
+--- PASS: TestReElection2A (4.50s)
+PASS
+</code></pre>
+<p>开始写Lab时，首先进行任务拆分：</p>
+<ol>
+<li>结构定义</li>
+<li>新建一个实例时，新建核心循环线程</li>
+<li>实现仅进行心跳检测的AppendEntries RPC，包括发送和接受</li>
+<li>判断超过election timeout后，开启election</li>
+<li>candidate成功选为leader的情况</li>
+<li>candidate收到其他candidate当选的情况</li>
+<li>candidate进入新一轮选举的情况</li>
+<li>随机化的election timeouts (按照lab要求要略微大于 150-300ms 这个范围)</li>
+<li>实现 GetState ，使其能够获取实例的状态</li>
+</ol>
+<p>实际开发中，定义了身份状态（没想到golang用这种方式定义枚举）</p>
+<pre><code class="go">const (
+    LEADER    int = 0
+    CANDIDATE     = 1
+    FOLLOWER      = 2
+)
+</code></pre>
+<p>除了论文 Figure 2 中提到的字段，Raft类里我还定义了如下字段。后续Lab中估计还会有新的</p>
+<pre><code class="go">...
+    state           int
+    electionTimeout int
+    heartBeat       bool
+    takenVote       bool
+    voteCnt         int
+...
+</code></pre>
+<p>解释一下，state是身份状态，electionTimeout是记录的延迟时间，voteCnt是计票是用的。重点说下heartBeat和takenVote，这两个代表的是一个election timeout内有没有收到心跳，有没有发送投票。按照规则，如果election timeout到了，没有收到心跳并不代表一定转为candidate，发送投票了也是就继续保留为follower。自己实现时候一开始漏了这个点，结果就是server不断地从follower变为candidate再变为follower，永远选不出leader。</p>
+<p>核心流程的入口是在新建实例时，新起的循环线程，只要不kill都会跑下去，我把它命名为<code>mainFlow</code>。在这里，leader做的事情是发送AppendEntries，Candidate做的事情是发送RequestVote（如果到了electionTimeout还是Candidate身份，就重新发起一次election），follower做的事情是判断要不要变为Candidate。</p>
+<p>发送AppendEntries和发送RequestVote的要点：一个是对peers要异步发送，同步发送信息是不可接受的：</p>
+<pre><code class="go">for i := range rf.peers &#123;
+    go func(ii int) &#123;
+        // ...
+    &#125;(i)
+&#125;
+</code></pre>
+<p>另一个要点是，我在每次加锁之后都先判断一下state。两段锁之间状态的值是有可能改变的，因此必须加以校验。</p>
+<p>最后有三个实用的方法，会在各处多次被调用：<code>convertToFollower</code>、<code>convertToCandidate</code>、<code>convertToLeader</code>。<code>convertToFollower</code>是需要参数的，需要currentTerm和voteFor，将这两个值更新，然后重新随机生成electionTimeout。<code>convertToCandidate</code>会递增currentTerm，然后给自己投票，重新随机生成electionTimeout。<code>convertToLeader</code>会初始化nextIndex和matchIndex，这两个目前Lab2A没用到，之后再细说。</p>
 
-
-              
-            </div>
-        </div>
+      
     </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://juniousy.github.io/2022/06/26/2022/6.824Lab2A/" title="6.824 Lab2A" target="_blank" rel="external">https://juniousy.github.io/2022/06/26/2022/6.824Lab2A/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/JuniousY" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/JuniousY" target="_blank"><span class="text-dark">JuniousY</span><small class="ml-1x">后端程序员</small></a></h3>
+        <div>倾听GHOST的低语。</div>
+      </div>
+    </figure>
+  </div>
 </div>
+
+
     </div>
   </article>
-   
+  
+    
+  <section id="comments">
+  	
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    
+    <li class="next">
+      <a href="/2022/06/12/2022/6.824Lab2-Lab%E5%89%8D%E5%87%86%E5%A4%87/" title="6.824 Lab2 - Raft - Lab前准备"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,twitter" data-mobile-sites="weibo,qq"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
 </main>
 
   <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
@@ -423,6 +560,12 @@ window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
 
 
 
+   
+
+
+
+
+   
 
 
 
