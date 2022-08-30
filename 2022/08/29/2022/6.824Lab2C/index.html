@@ -17,19 +17,21 @@
   <meta http-equiv="window-target" content="_top" />
   
   
-  <title>Archive | Hexo</title>
-  <meta name="description" content="后端开发,请多多指教">
-<meta property="og:type" content="website">
-<meta property="og:title" content="JuniousY的博客">
-<meta property="og:url" content="https://juniousy.github.io/archives/page/2/index.html">
+  <title>MIT 6.824 Lab2C | Hexo</title>
+  <meta name="description" content="2C的持久化本身比较简单，就是把currentTerm、voteFor、logEntries存和取就行。需要注意的点的存数据的时间点应该在这三个值有变化的时候，准确来说，一个是在变为follower和candidate的时候，另一个是在commit data之后。尤其强调是在之后做持久化，否则会把未提交的数据保留下来。 但是实际跑测试的时候有一个测试怎么都通不过，试了很多次，然后试了很多日志终于发">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MIT 6.824 Lab2C">
+<meta property="og:url" content="https://juniousy.github.io/2022/08/29/2022/6.824Lab2C/index.html">
 <meta property="og:site_name" content="JuniousY的博客">
-<meta property="og:description" content="后端开发,请多多指教">
+<meta property="og:description" content="2C的持久化本身比较简单，就是把currentTerm、voteFor、logEntries存和取就行。需要注意的点的存数据的时间点应该在这三个值有变化的时候，准确来说，一个是在变为follower和candidate的时候，另一个是在commit data之后。尤其强调是在之后做持久化，否则会把未提交的数据保留下来。 但是实际跑测试的时候有一个测试怎么都通不过，试了很多次，然后试了很多日志终于发">
 <meta property="og:locale">
+<meta property="article:published_time" content="2022-08-29T15:30:30.000Z">
+<meta property="article:modified_time" content="2022-08-30T15:45:44.800Z">
 <meta property="article:author" content="JuniousY">
-<meta property="article:tag" content="个人博客,java,程序员,开发,后端">
+<meta property="article:tag" content="distributed system">
 <meta name="twitter:card" content="summary">
   <!-- Canonical links -->
-  <link rel="canonical" href="https://juniousy.github.io/archives/page/2/index.html">
+  <link rel="canonical" href="https://juniousy.github.io/2022/08/29/2022/6.824Lab2C/index.html">
   
     <link rel="alternate" href="/atom.xml" title="JuniousY的博客" type="application/atom+xml">
   
@@ -297,124 +299,231 @@
   
   
 <main class="main" role="main">
-  	<article class="content article article-archives article-type-list" itemscope="">
-	    <header class="article-header">
-	      <h1 itemprop="title">Archive</h1>
-	      <p class="text-muted">Total 13 articles</p>
-	    </header>
-	    <div class="article-body">
-	      
-  
-  
+  <div class="content">
+  <article id="post-2022/6.824Lab2C" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
     
-    
+    <div class="article-header">
       
+        
+  
+    <h1 class="article-title" itemprop="name">
+      MIT 6.824 Lab2C
+    </h1>
+  
+
       
-      <section class="panel panel-default b-no">
-        <div class="panel-heading" role="tab">
-          <h3 class="panel-title">
-            <a data-toggle="collapse" href="#collapse2019" aria-expanded="true">
-              <i class="icon icon-calendar-plus text-active"></i><i class="icon icon-calendar-minus text"></i>
-              2019
-            </a>
-            <!-- <a href="/archives/2019" class="archive-year">2019</a> -->
-          </h3>
-        </div>
-        <div id="collapse2019" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading2019">
-        <div class="panel-body">
-          <div class="collection">
-    
-    
-<a href="/2019/06/05/%E5%AD%98%E6%A1%A3/Redis%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%BC%96%E7%A0%81/" class="collection-item"   itemprop="url">
-  <time datetime="2019-06-05T07:42:40.000Z" itemprop="datePublished">2019-06-05</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 【本科时期文章】Redis的数据结构与编码
-</a>
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/08/29/2022/6.824Lab2C/" class="article-date">
+	  <time datetime="2022-08-29T15:30:30.000Z" itemprop="datePublished">2022-08-29</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/Lab/">Lab</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/distributed-system/" rel="tag">distributed system</a>
+  </span>
 
 
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/08/29/2022/6.824Lab2C/#comments" class="article-comment-link">Comments</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 1.1k(words)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 5(minutes)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>2C的持久化本身比较简单，就是把currentTerm、voteFor、logEntries存和取就行。需要注意的点的存数据的时间点应该在这三个值有变化的时候，准确来说，一个是在变为follower和candidate的时候，另一个是在commit data之后。尤其强调是在之后做持久化，否则会把未提交的数据保留下来。</p>
+<p>但是实际跑测试的时候有一个测试怎么都通不过，试了很多次，然后试了很多日志终于发现不是持久化的问题。</p>
+<pre><code class="text">GO111MODULE=off go test -run 2C                     
+Test (2C): basic persistence ...
+  ... Passed --   5.6  3  100   24433    6
+Test (2C): more persistence ...
+  ... Passed --  18.0  5  988  204042   16
+Test (2C): partitioned leader and one follower crash, leader restarts ...
+  ... Passed --   2.4  3   34    8699    4
+Test (2C): Figure 8 ...
+  ... Passed --  31.4  5  560  106887    8
+Test (2C): unreliable agreement ...
+  ... Passed --   5.6  5  216   76193  246
+Test (2C): Figure 8 (unreliable) ...
+--- FAIL: TestFigure8Unreliable2C (45.35s)
+    config.go:478: one(8275) failed to reach agreement
+Test (2C): churn ...
+  ... Passed --  16.3  5  608  284683  268
+Test (2C): unreliable churn ...
+  ... Passed --  16.2  5  932  502715  249
+FAIL
+exit status 1
+</code></pre>
+<p>TestFigure8Unreliable2C是在测什么呢？对于普通的Figure 8 test，测试方法会不断地断线、宕机、重连服务，而加上Unreliable这个设定会让rpc请求随机失败或者延迟。通过Figure 8 test的核心点在于不要存未commit的数据（具体图见论文Figure 8）。</p>
+<p>而TestFigure8Unreliable2C的失败结果初看非常奇怪。在跑了无数次TestFigure8Unreliable2C后发现错误的结果大概率是这样的：5个server，4个commit结果完成一致，而另一个则完全没有commit或者只commit了前面很少的一部分，甚至可能有全量的log data但是一条都没有提交。</p>
+<p>以这次测试结果为例：</p>
+<pre><code class="text">Test (2C): Figure 8 (unreliable) ...
+*** server 1 成为 leader, currentTerm 1 ***
+leader 1  更新commitIndex 1, 原commitIndex 0
+*** server 4 成为 leader, currentTerm 3 ***
+*** server 3 成为 leader, currentTerm 4 ***
+*** server 3 成为 leader, currentTerm 7 ***
+leader 3  更新commitIndex 17, 原commitIndex 0
+leader 3  更新commitIndex 20, 原commitIndex 17
+*** server 0 成为 leader, currentTerm 10 ***
+*** server 2 成为 leader, currentTerm 11 ***
+*** server 1 成为 leader, currentTerm 36 ***
+*** server 0 成为 leader, currentTerm 49 ***
+*** server 1 成为 leader, currentTerm 51 ***
+leader 1  更新commitIndex 184, 原commitIndex 20
+*** server 4 成为 leader, currentTerm 55 ***
+*** server 4 成为 leader, currentTerm 64 ***
+*** server 3 成为 leader, currentTerm 77 ***
+*** server 3 成为 leader, currentTerm 93 ***
+leader 3  更新commitIndex 327, 原commitIndex 184
+leader 3  更新commitIndex 328, 原commitIndex 327
+leader 3  更新commitIndex 329, 原commitIndex 328
+leader 3  更新commitIndex 330, 原commitIndex 329
+</code></pre>
+<p>最后结果是server1-4的结果都是对的，只有server0的commit index停留在20。</p>
+<p>为什么呢？再打日志发现，TestFigure8Unreliable2C最后会让服务全部连线上（但是rpc请求还是可能失败），此时leader不断地向原来被分割开的服务发送同样的请求，而返回也是同样的coflict term 和 conflict index。这两个值是server告诉leader，你传的数据不对，要从这个地方重新传。</p>
+<p>看下原来leader处的处理：</p>
+<pre><code class="go">// 有冲突的情况
+if reply.ConflictTerm != -1 &#123;
+  for i, v := range rf.logEntries &#123;
+    if v.Term == reply.ConflictTerm &#123;
+      rf.nextIndex[id] = i
+      break
+    &#125;
+  &#125;
+&#125; else &#123;
+  rf.nextIndex[id] = reply.ConflictIndex
+&#125;
+</code></pre>
+<p>从表现上看，这里一直在根据coflict term决定下一次传的index id会陷入调用上的死循环。所以在此处，更应该注意follower自己发的conflict index。于是修改后加了一条逻辑：</p>
+<pre><code class="go">
+if reply.ConflictTerm != -1 &#123;
+  if rf.logEntries[reply.ConflictIndex].Term == reply.ConflictTerm &#123;
+    for i, v := range rf.logEntries &#123;
+      if v.Term == reply.ConflictTerm &#123;
+        rf.nextIndex[id] = i
+        break
+      &#125;
+    &#125;
+  &#125; else &#123;
+    rf.nextIndex[id] = reply.ConflictIndex
+  &#125;
+&#125; else &#123;
+  rf.nextIndex[id] = reply.ConflictIndex
+&#125;
+</code></pre>
+<p>这样做就解决了问题，最后顺利通过全部测试。</p>
+<pre><code class="text">GO111MODULE=off go test -run 2C                     
+Test (2C): basic persistence ...
+  ... Passed --   4.2  3  114   29456    6
+Test (2C): more persistence ...
+  ... Passed --  22.7  5 2125  472533   19
+Test (2C): partitioned leader and one follower crash, leader restarts ...
+  ... Passed --   3.9  3  102   28521    4
+Test (2C): Figure 8 ...
+  ... Passed --  35.1  5  676  119626    7
+Test (2C): unreliable agreement ...
+  ... Passed --   3.0  5  216   75708  246
+Test (2C): Figure 8 (unreliable) ...
+  ... Passed --  37.3  5 4612 7879256  172
+Test (2C): churn ...
+  ... Passed --  16.3  5 1240 1145184  697
+Test (2C): unreliable churn ...
+  ... Passed --  16.1  5 1220  879587  526
+PASS
+ok      .../src/raft 138.617s
+</code></pre>
+<p>最后，我自己总结出的本项目的打日志方法，最主要的是这么几个地方：选取出leader处、leader提交数据处。其他地方也需要酌情打日志，但是很可能信息太多，淹没了有用的信息。</p>
+<p>Lab的测试期望在4分钟内跑完，最后2A8秒，2B约38秒，2C约138秒，至少在我的电脑上达到标准了。</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://juniousy.github.io/2022/08/29/2022/6.824Lab2C/" title="MIT 6.824 Lab2C" target="_blank" rel="external">https://juniousy.github.io/2022/08/29/2022/6.824Lab2C/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/JuniousY" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/JuniousY" target="_blank"><span class="text-dark">JuniousY</span><small class="ml-1x">后端程序员</small></a></h3>
+        <div>倾听GHOST的低语。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
   
     
-    
-    
-<a href="/2019/06/04/%E5%AD%98%E6%A1%A3/%E4%BB%8ERedis-I-O%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E5%88%B0Java-NIO-Selector/" class="collection-item"   itemprop="url">
-  <time datetime="2019-06-04T07:19:21.000Z" itemprop="datePublished">2019-06-04</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 【本科时期文章】从Redis I/O多路复用到Java NIO Selector
-</a>
-
-
-  
-    
-    
-    
-<a href="/2019/05/17/%E5%AD%98%E6%A1%A3/LeetCode-23-Merge-k-Sorted-Lists/" class="collection-item"   itemprop="url">
-  <time datetime="2019-05-17T08:53:24.000Z" itemprop="datePublished">2019-05-17</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 【本科时期文章】LeetCode 23. Merge k Sorted Lists
-</a>
-
-
-  
-    
-    
-    
-<a href="/2019/03/24/%E5%AD%98%E6%A1%A3/ThreadLocal/" class="collection-item"   itemprop="url">
-  <time datetime="2019-03-24T14:12:30.000Z" itemprop="datePublished">2019-03-24</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 【本科时期文章】ThreadLocal
-</a>
-
-
-  
-    
-    
-    
-<a href="/2019/03/20/%E5%AD%98%E6%A1%A3/Java-Collection%E7%AC%94%E8%AE%B0/" class="collection-item"   itemprop="url">
-  <time datetime="2019-03-20T12:19:10.000Z" itemprop="datePublished">2019-03-20</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 【本科时期文章】Java Collection笔记
-</a>
-
-
-  
-    
-    
-    
-<a href="/2019/03/11/%E5%AD%98%E6%A1%A3/%E5%AE%9E%E7%8E%B0LRUCache/" class="collection-item"   itemprop="url">
-  <time datetime="2019-03-11T14:57:49.000Z" itemprop="datePublished">2019-03-11</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 【本科时期文章】实现LRUCache
-</a>
-
-
-  
-  
-    </div></div></div></section>
-  
-
-	    </div>
-  	</article>
+  <section id="comments">
   	
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
     
-    <nav class="bar bar-footer clearfix" data-stick-bottom>
-        <div class="bar-inner">
-        <ul class="pager pull-left">
-            
-            <li class="prev">
-                <a href="/archives/">
-                    <i class="icon icon-angle-left"></i>
-                    Prev
-                </a>
-            </li>
-            
-            
-            <li class="next">
-                <a href="/archives/page/3/">
-                    Next
-                    <i class="icon icon-angle-right"></i>
-                </a>
-            </li>
-            
-        </ul>
-            <div class="total-article bar-right">Page 2 of 3</div>
-        </div>
-    </nav>
     
- 	
+    <li class="next">
+      <a href="/2022/08/09/2022/6.824Lab2B/" title="MIT 6.824 Lab2B"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,twitter" data-mobile-sites="weibo,qq"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
 </main>
 
   <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
@@ -478,6 +587,12 @@ window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
 
 
 
+   
+
+
+
+
+   
 
 
 
