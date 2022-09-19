@@ -17,22 +17,21 @@
   <meta http-equiv="window-target" content="_top" />
   
   
-  <title>【本科时期文章】从Redis I/O多路复用到Java NIO Selector | Hexo</title>
-  <meta name="description" content="Redis的I&#x2F;O多路复用架构Redis的一大特点就是单线程架构。单线程架构既避免了多线程可能产生的竞争问题，又避免了多线程的频繁上下文切换问题，是Redis高效率的保证。">
+  <title>【本科时期文章】实现LRUCache | Hexo</title>
+  <meta name="description" content="举例相关leetcode题： 94. 二叉树的中序遍历递归我就不说了 迭代（重点是使用栈）：class Solution &amp;#123;     public List&lt;Integer&gt; inorderTraversal(TreeNode root) &amp;#123;         List&lt;Integer&gt; res &#x3D; new ArrayList&lt;Integer&gt;">
 <meta property="og:type" content="article">
-<meta property="og:title" content="【本科时期文章】从Redis I&#x2F;O多路复用到Java NIO Selector">
-<meta property="og:url" content="https://juniousy.github.io/2019/06/04/%E5%AD%98%E6%A1%A3/%E4%BB%8ERedis-I-O%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E5%88%B0Java-NIO-Selector/index.html">
+<meta property="og:title" content="【本科时期文章】实现LRUCache">
+<meta property="og:url" content="https://juniousy.github.io/2022/09/20/2022/%E9%9D%9E%E9%80%92%E5%BD%92%E4%B8%AD%E5%BA%8F%E9%81%8D%E5%8E%86%E4%BA%8C%E5%8F%89%E6%A0%91/index.html">
 <meta property="og:site_name" content="JuniousY的博客">
-<meta property="og:description" content="Redis的I&#x2F;O多路复用架构Redis的一大特点就是单线程架构。单线程架构既避免了多线程可能产生的竞争问题，又避免了多线程的频繁上下文切换问题，是Redis高效率的保证。">
+<meta property="og:description" content="举例相关leetcode题： 94. 二叉树的中序遍历递归我就不说了 迭代（重点是使用栈）：class Solution &amp;#123;     public List&lt;Integer&gt; inorderTraversal(TreeNode root) &amp;#123;         List&lt;Integer&gt; res &#x3D; new ArrayList&lt;Integer&gt;">
 <meta property="og:locale">
-<meta property="article:published_time" content="2019-06-04T07:19:21.000Z">
-<meta property="article:modified_time" content="2022-05-30T09:06:50.983Z">
+<meta property="article:published_time" content="2022-09-19T17:37:00.000Z">
+<meta property="article:modified_time" content="2022-09-19T18:14:43.499Z">
 <meta property="article:author" content="JuniousY">
-<meta property="article:tag" content="Java">
-<meta property="article:tag" content="Redis">
+<meta property="article:tag" content="算法">
 <meta name="twitter:card" content="summary">
   <!-- Canonical links -->
-  <link rel="canonical" href="https://juniousy.github.io/2019/06/04/%E5%AD%98%E6%A1%A3/%E4%BB%8ERedis-I-O%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E5%88%B0Java-NIO-Selector/index.html">
+  <link rel="canonical" href="https://juniousy.github.io/2022/09/20/2022/%E9%9D%9E%E9%80%92%E5%BD%92%E4%B8%AD%E5%BA%8F%E9%81%8D%E5%8E%86%E4%BA%8C%E5%8F%89%E6%A0%91/index.html">
   
     <link rel="alternate" href="/atom.xml" title="JuniousY的博客" type="application/atom+xml">
   
@@ -301,14 +300,14 @@
   
 <main class="main" role="main">
   <div class="content">
-  <article id="post-存档/从Redis-I-O多路复用到Java-NIO-Selector" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+  <article id="post-2022/非递归中序遍历二叉树" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
     
     <div class="article-header">
       
         
   
     <h1 class="article-title" itemprop="name">
-      【本科时期文章】从Redis I/O多路复用到Java NIO Selector
+      【本科时期文章】实现LRUCache
     </h1>
   
 
@@ -316,8 +315,8 @@
       <div class="article-meta">
         <span class="article-date">
     <i class="icon icon-calendar-check"></i>
-	<a href="/2019/06/04/%E5%AD%98%E6%A1%A3/%E4%BB%8ERedis-I-O%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E5%88%B0Java-NIO-Selector/" class="article-date">
-	  <time datetime="2019-06-04T07:19:21.000Z" itemprop="datePublished">2019-06-04</time>
+	<a href="/2022/09/20/2022/%E9%9D%9E%E9%80%92%E5%BD%92%E4%B8%AD%E5%BA%8F%E9%81%8D%E5%8E%86%E4%BA%8C%E5%8F%89%E6%A0%91/" class="article-date">
+	  <time datetime="2022-09-19T17:37:00.000Z" itemprop="datePublished">2022-09-20</time>
 	</a>
 </span>
         
@@ -329,234 +328,153 @@
         
   <span class="article-tag">
     <i class="icon icon-tags"></i>
-	<a class="article-tag-link-link" href="/tags/Java/" rel="tag">Java</a>, <a class="article-tag-link-link" href="/tags/Redis/" rel="tag">Redis</a>
+	<a class="article-tag-link-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a>
   </span>
 
 
         
 
-        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2019/06/04/%E5%AD%98%E6%A1%A3/%E4%BB%8ERedis-I-O%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E5%88%B0Java-NIO-Selector/#comments" class="article-comment-link">Comments</a></span>
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/09/20/2022/%E9%9D%9E%E9%80%92%E5%BD%92%E4%B8%AD%E5%BA%8F%E9%81%8D%E5%8E%86%E4%BA%8C%E5%8F%89%E6%A0%91/#comments" class="article-comment-link">Comments</a></span>
         
 	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 1.9k(words)</span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 939(words)</span>
 	
 	
-		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 8(minutes)</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 4(minutes)</span>
 	
 
       </div>
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
       
-        <h3 id="Redis的I-O多路复用架构"><a href="#Redis的I-O多路复用架构" class="headerlink" title="Redis的I/O多路复用架构"></a>Redis的I/O多路复用架构</h3><p>Redis的一大特点就是单线程架构。单线程架构既避免了多线程可能产生的竞争问题，又避免了多线程的频繁上下文切换问题，是Redis高效率的保证。</p>
-<span id="more"></span>
-
-<p>对于网络I/O操作，Redis基于 Reactor 模式可以用单个线程处理多个Socket。内部实现为使用文件事件处理器(file event handler)进行网络事件处理器，这个文件事件处理器是单线程的。文件事件处理器采用<code> I/O 多路复用机制(multiplexing)</code>同时监听多个 socket。产生事件的 socket 压入内存队列中，事件分派器根据 socket 上的事件类型来选择对应的事件处理器进行处理。操作包括应答（accept）、读取（read）、写入（write）、关闭（close）等。文件事件处理器的结构包含 4 个部分：</p>
+        <p>举例相关leetcode题：</p>
+<h3 id="94-二叉树的中序遍历"><a href="#94-二叉树的中序遍历" class="headerlink" title="94. 二叉树的中序遍历"></a>94. 二叉树的中序遍历</h3><p>递归我就不说了</p>
+<h4 id="迭代（重点是使用栈）："><a href="#迭代（重点是使用栈）：" class="headerlink" title="迭代（重点是使用栈）："></a>迭代（重点是使用栈）：</h4><pre><code class="java">class Solution &#123;
+    public List&lt;Integer&gt; inorderTraversal(TreeNode root) &#123;
+        List&lt;Integer&gt; res = new ArrayList&lt;Integer&gt;();
+        Deque&lt;TreeNode&gt; stk = new LinkedList&lt;TreeNode&gt;();
+        while (root != null || !stk.isEmpty()) &#123;
+            while (root != null) &#123;
+                stk.push(root);
+                root = root.left;
+            &#125;
+            root = stk.pop();
+            res.add(root.val);
+            root = root.right;
+        &#125;
+        return res;
+    &#125;
+&#125;
+</code></pre>
+<h4 id="染色法"><a href="#染色法" class="headerlink" title="染色法"></a>染色法</h4><p>参考资料看到的，也是用到了栈，不过会进行“染色”，规则为：</p>
 <ul>
-<li>多个 socket</li>
-<li>I/O 多路复用程序</li>
-<li>文件事件分派器</li>
-<li>事件处理器（连接应答处理器、命令请求处理器、命令回复处理器）<br>连接应答处理器会创建一个能与客户端通信的 socket01，通过这个返回结果给客户端。Redis单线程的核心就是I/O 多路复用程序。</li>
+<li>使用颜色标记节点的状态，新节点为白色，已访问的节点为灰色。</li>
+<li>如果遇到的节点为白色，则将其标记为灰色，然后将其右子节点、自身、左子节点依次入栈。</li>
+<li>如果遇到的节点为灰色，则将节点的值输出。</li>
 </ul>
-<p>I/O多路复用（IO Multiplexing）有时也称为异步阻塞IO，是一种事件驱动的I/O模型。单个I/O操作在一般情况下往往不能直接返回，传统的阻塞 I/O 模型会阻塞直到系统内核返回数据。而在 I/O 多路复用模型中，系统调用select/poll/epoll 函数会不断的查询所监测的 socket 文件描述符，查看其中是否有 socket 准备好读写了，如果有，那么系统就会通知用户进程。</p>
-<p>Redis 的 I/O 多路复用程序的所有功能都是通过包装常见的 select 、 epoll 、 evport 和 kqueue 这些 I/O 多路复用函数库来实现的， 每个 I/O 多路复用函数库在 Redis 源码中都对应一个单独的文件。</p>
-<p>以ae_select.c实现的封装select方法为例。<code>select</code>方法定义如下所示，检测是否可读、可写、异常，返回准备完毕的descriptors个数。</p>
-<pre><code class="c">extern int select (int __nfds, fd_set *__restrict __readfds,
-           fd_set *__restrict __writefds,
-           fd_set *__restrict __exceptfds,
-           struct timeval *__restrict __timeout);
+<pre><code class="python">class Solution:
+    def inorderTraversal(self, root: TreeNode) -&gt; List[int]:
+        WHITE, GRAY = 0, 1
+        res = []
+        stack = [(WHITE, root)]
+        while stack:
+            color, node = stack.pop()
+            if node is None: continue
+            if color == WHITE:
+                stack.append((WHITE, node.right))
+                stack.append((GRAY, node))
+                stack.append((WHITE, node.left))
+            else:
+                res.append(node.val)
+        return res
 </code></pre>
-<p>Redis封装首先通过<code>aeApiCreate</code>初始化 rfds 和 wfds，注册到aeEventLoop中去。</p>
-<pre><code class="c">static int aeApiCreate(aeEventLoop *eventLoop) &#123;
-    aeApiState *state = zmalloc(sizeof(aeApiState));
+<p>如要实现前序、后序遍历，只需要调整左右子节点的入栈顺序即可。</p>
+<h4 id="Morris-中序遍历"><a href="#Morris-中序遍历" class="headerlink" title="Morris 中序遍历"></a>Morris 中序遍历</h4><p>Morris 遍历算法是另一种遍历二叉树的方法，它能将非递归的中序遍历空间复杂度降为 O(1)。</p>
+<p>Morris 遍历算法整体步骤如下（假设当前遍历到的节点为 xx）：</p>
+<ul>
+<li>如果 xx 无左孩子，先将 xx 的值加入答案数组，再访问 xx 的右孩子，即 x = x.\textit{right}x=x.right。</li>
+<li>如果 xx 有左孩子，则找到 xx 左子树上最右的节点（<strong>即左子树中序遍历的最后一个节点，xx 在中序遍历中的前驱节点</strong>），我们记为predecessor。根据 predecessor 的右孩子是否为空，进行如下操作。<ul>
+<li>如果 predecessor 的右孩子为空，则将其右孩子指向 xx，然后访问 xx 的左孩子，即 x=x.left。</li>
+<li>如果 predecessor 的右孩子不为空，则此时其右孩子指向 xx，说明我们已经遍历完 xx 的左子树，我们将 predecessor 的右孩子置空，将 xx 的值加入答案数组，然后访问 xx 的右孩子，即 x=x.right。</li>
+</ul>
+</li>
+<li>重复上述操作，直至访问完整棵树。</li>
+</ul>
+<pre><code class="java">class Solution &#123;
+    public List&lt;Integer&gt; inorderTraversal(TreeNode root) &#123;
+        List&lt;Integer&gt; res = new ArrayList&lt;Integer&gt;();
+        TreeNode predecessor = null;
 
-    if (!state) return -1;
-    FD_ZERO(&amp;state-&gt;rfds);
-    FD_ZERO(&amp;state-&gt;wfds);
-    eventLoop-&gt;apidata = state;
-    return 0;
-&#125;
-</code></pre>
-<p>而 <code>aeApiAddEvent</code> 和 <code>aeApiDelEvent</code> 会通过 FD_SET 和 FD_CLR 修改 fd_set 中对应 FD 的标志位。</p>
-<pre><code class="c">static int aeApiAddEvent(aeEventLoop *eventLoop, int fd, int mask) &#123;
-    aeApiState *state = eventLoop-&gt;apidata;
-
-    if (mask &amp; AE_READABLE) FD_SET(fd,&amp;state-&gt;rfds);
-    if (mask &amp; AE_WRITABLE) FD_SET(fd,&amp;state-&gt;wfds);
-    return 0;
-&#125;
-
-static void aeApiDelEvent(aeEventLoop *eventLoop, int fd, int mask) &#123;
-    aeApiState *state = eventLoop-&gt;apidata;
-
-    if (mask &amp; AE_READABLE) FD_CLR(fd,&amp;state-&gt;rfds);
-    if (mask &amp; AE_WRITABLE) FD_CLR(fd,&amp;state-&gt;wfds);
-&#125;
-</code></pre>
-<p><code>aeApiPoll</code>是实际调用 select 函数的部分，其作用就是在 I/O 多路复用函数返回时，将对应的 FD 加入 aeEventLoop 的 fired 数组中，并返回事件的个数：</p>
-<pre><code class="c">static int aeApiPoll(aeEventLoop *eventLoop, struct timeval *tvp) &#123;
-    aeApiState *state = eventLoop-&gt;apidata;
-    int retval, j, numevents = 0;
-
-    memcpy(&amp;state-&gt;_rfds,&amp;state-&gt;rfds,sizeof(fd_set));
-    memcpy(&amp;state-&gt;_wfds,&amp;state-&gt;wfds,sizeof(fd_set));
-
-    retval = select(eventLoop-&gt;maxfd+1,
-                &amp;state-&gt;_rfds,&amp;state-&gt;_wfds,NULL,tvp);
-    if (retval &gt; 0) &#123;
-        for (j = 0; j &lt;= eventLoop-&gt;maxfd; j++) &#123;
-            int mask = 0;
-            aeFileEvent *fe = &amp;eventLoop-&gt;events[j];
-
-            if (fe-&gt;mask == AE_NONE) continue;
-            if (fe-&gt;mask &amp; AE_READABLE &amp;&amp; FD_ISSET(j,&amp;state-&gt;_rfds))
-                mask |= AE_READABLE;
-            if (fe-&gt;mask &amp; AE_WRITABLE &amp;&amp; FD_ISSET(j,&amp;state-&gt;_wfds))
-                mask |= AE_WRITABLE;
-            eventLoop-&gt;fired[numevents].fd = j;
-            eventLoop-&gt;fired[numevents].mask = mask;
-            numevents++;
-        &#125;
-    &#125;
-    return numevents;
-&#125;
-</code></pre>
-<p>epoll函数的封装类似。区别在于 epoll_wait 函数返回时并不需要遍历所有的 FD 查看读写情况；在  epoll_wait 函数返回时会提供一个 epoll_event 数组，其中保存了发生的 epoll 事件（EPOLLIN、EPOLLOUT、EPOLLERR 和 EPOLLHUP）以及发生该事件的 FD。Redis封装的调用只需要将<code>epoll_event</code>数组中存储的信息加入eventLoop的 fired 数组中，将信息传递给上层模块：</p>
-<pre><code class="c">static int aeApiPoll(aeEventLoop *eventLoop, struct timeval *tvp) &#123;
-    aeApiState *state = eventLoop-&gt;apidata;
-    int retval, numevents = 0;
-
-    retval = epoll_wait(state-&gt;epfd,state-&gt;events,eventLoop-&gt;setsize,
-            tvp ? (tvp-&gt;tv_sec*1000 + tvp-&gt;tv_usec/1000) : -1);
-    if (retval &gt; 0) &#123;
-        int j;
-
-        numevents = retval;
-        for (j = 0; j &lt; numevents; j++) &#123;
-            int mask = 0;
-            struct epoll_event *e = state-&gt;events+j;
-
-            if (e-&gt;events &amp; EPOLLIN) mask |= AE_READABLE;
-            if (e-&gt;events &amp; EPOLLOUT) mask |= AE_WRITABLE;
-            if (e-&gt;events &amp; EPOLLERR) mask |= AE_WRITABLE;
-            if (e-&gt;events &amp; EPOLLHUP) mask |= AE_WRITABLE;
-            eventLoop-&gt;fired[j].fd = e-&gt;data.fd;
-            eventLoop-&gt;fired[j].mask = mask;
-        &#125;
-    &#125;
-    return numevents;
-&#125;
-</code></pre>
-<p>当Socket变得可读时（客户端对Socket执行 write 操作，或者执行 close 操作）， 或者有新的可应答（acceptable）Socket出现时（客户端对服务器的监听Socket执行 connect 操作），Socket产生 AE_READABLE 事件。而当Socket变得可写时（客户端对Socket执行 read 操作）， Socket产生 AE_WRITABLE 事件。<br>I/O 多路复用程序允许服务器同时监听Socket的 AE_READABLE 事件和 AE_WRITABLE 事件， 如果一个Socket同时产生了这两种事件， 那么文件事件分派器会优先处理 AE_READABLE 事件， 等到 AE_READABLE 事件处理完之后， 才处理 AE_WRITABLE 事件。换句话说， 如果一个Socket又可读又可写的话， 那么服务器将先读Socket， 后写Socket。</p>
-<h3 id="Java-NIO-Selector"><a href="#Java-NIO-Selector" class="headerlink" title="Java NIO Selector"></a>Java NIO Selector</h3><p>Java中也有I/O多路复用的方式，例子为NIO的<code>Selector</code>。<br><code>selector</code>的创建方式为调用<code>Selector</code>类的静态方法，由<code>SelectorProvider</code>提供：<code>Selector selector = Selector.open();</code></p>
-<pre><code class="java">public static Selector open() throws IOException &#123;
-    return SelectorProvider.provider().openSelector();
-&#125;
-</code></pre>
-<p><code>SelectorProvider</code>是单例模式，Linux默认提供<code>EPollSelectorProvider</code>，即提供的Selector为<code>EPollSelectorImpl</code>。</p>
-<pre><code class="java">public static SelectorProvider provider() &#123;
-    synchronized (lock) &#123;
-        if (provider != null)
-            return provider;
-        return AccessController.doPrivileged(
-            new PrivilegedAction&lt;SelectorProvider&gt;() &#123;
-                public SelectorProvider run() &#123;
-                    if (loadProviderFromProperty())
-                        return provider;
-                    if (loadProviderAsService())
-                        return provider;
-                    provider = sun.nio.ch.DefaultSelectorProvider.create();
-                    return provider;
+        while (root != null) &#123;
+            if (root.left != null) &#123;
+                // predecessor 节点就是当前 root 节点向左走一步，然后一直向右走至无法走为止
+                predecessor = root.left;
+                while (predecessor.right != null &amp;&amp; predecessor.right != root) &#123;
+                    predecessor = predecessor.right;
                 &#125;
-            &#125;);
-    &#125;
-&#125;
-
-//.....
-
-/**
-     * Returns the default SelectorProvider.
-     */
-public static SelectorProvider create() &#123;
-    String osname = AccessController
-        .doPrivileged(new GetPropertyAction(&quot;os.name&quot;));
-    if (osname.equals(&quot;SunOS&quot;))
-        return createProvider(&quot;sun.nio.ch.DevPollSelectorProvider&quot;);
-    if (osname.equals(&quot;Linux&quot;))
-        return createProvider(&quot;sun.nio.ch.EPollSelectorProvider&quot;);
-    return new sun.nio.ch.PollSelectorProvider();
-&#125;
-</code></pre>
-<p>调用系统Epoll方法的地方在<code>EPollArrayWrapper</code>类的<code>poll</code>方法中，该类由<code>EPollSelectorImpl</code>持有：</p>
-<pre><code class="java">int poll(long timeout) throws IOException &#123;
-    updateRegistrations();
-    updated = epollWait(pollArrayAddress, NUM_EPOLLEVENTS, timeout, epfd);
-    for (int i=0; i&lt;updated; i++) &#123;
-        if (getDescriptor(i) == incomingInterruptFD) &#123;
-            interruptedIndex = i;
-            interrupted = true;
-            break;
+                
+                // 让 predecessor 的右指针指向 root，继续遍历左子树
+                if (predecessor.right == null) &#123;
+                    predecessor.right = root;
+                    root = root.left;
+                &#125;
+                // 说明左子树已经访问完了，我们需要断开链接
+                else &#123;
+                    res.add(root.val);
+                    predecessor.right = null;
+                    root = root.right;
+                &#125;
+            &#125;
+            // 如果没有左孩子，则直接访问右孩子
+            else &#123;
+                res.add(root.val);
+                root = root.right;
+            &#125;
         &#125;
+        return res;
     &#125;
-    return updated;
 &#125;
 </code></pre>
-<p><code>Selector</code>使用中需要绑定<code>Channel</code>。以<code>ServerSocketChannel</code>为例：</p>
-<pre><code class="java">ServerSocketChannel serverSocket = ServerSocketChannel.open();
-serverSocket.bind(new InetSocketAddress(&quot;localhost&quot;, 5454));
-serverSocket.configureBlocking(false);
-serverSocket.register(selector, SelectionKey.OP_ACCEPT);
-</code></pre>
-<p>注册时会调用<code>Selector</code>的回调方法<code>register</code>，生成<code>SelectionKey</code>。</p>
-<pre><code class="java">protected final SelectionKey register(AbstractSelectableChannel ch,
-                                      int ops,
-                                      Object attachment)
-&#123;
-    if (!(ch instanceof SelChImpl))
-        throw new IllegalSelectorException();
-    SelectionKeyImpl k = new SelectionKeyImpl((SelChImpl)ch, this);
-    k.attach(attachment);
-    synchronized (publicKeys) &#123;
-        implRegister(k);
-    &#125;
-    k.interestOps(ops);
-    return k;
-&#125;
-</code></pre>
-<p>最后在使用时根据<code>SelectionKeys</code>遍历查看状态。可以通过监听的事件有：</p>
-<ul>
-<li>Connect – OP_CONNECT client尝试连接</li>
-<li>Accept – OP_ACCEPT server端接受连接</li>
-<li>Read – OP_READ server端可以开始从channel里读取</li>
-<li>Write – OP_WRITE server端可以向channel里写</li>
-</ul>
-<p>使用方式类似：</p>
-<pre><code class="java">while (true) &#123;
-    selector.select();
-    Set&lt;SelectionKey&gt; selectedKeys = selector.selectedKeys();
-    Iterator&lt;SelectionKey&gt; iter = selectedKeys.iterator();
-    while (iter.hasNext()) &#123;
-
-        SelectionKey key = iter.next();
-
-        if (key.isAcceptable()) &#123;
-            register(selector, serverSocket);
+<p>特点是空间复杂度为O(1)、会改变原来树的结构</p>
+<h3 id="98-验证二叉搜索树（给你一个二叉树的根节点-root-，判断其是否是一个有效的二叉搜索树）"><a href="#98-验证二叉搜索树（给你一个二叉树的根节点-root-，判断其是否是一个有效的二叉搜索树）" class="headerlink" title="98. 验证二叉搜索树（给你一个二叉树的根节点 root ，判断其是否是一个有效的二叉搜索树）"></a>98. 验证二叉搜索树（给你一个二叉树的根节点 root ，判断其是否是一个有效的二叉搜索树）</h3><p>这是一道相关的题目</p>
+<pre><code class="java">class Solution &#123;
+    public boolean isValidBST(TreeNode root) &#123;
+        Deque&lt;TreeNode&gt; stack = new LinkedList&lt;&gt;();
+        long preVal = Long.MIN_VALUE;
+        TreeNode node = root;
+        while(!stack.isEmpty() || node != null) &#123;
+            while(node != null) &#123;
+                stack.push(node);
+                node = node.left;
+            &#125;
+            node = stack.pop();
+            if(node.val &lt;= preVal) &#123;
+                return false;
+            &#125;
+            preVal = node.val;
+            node = node.right;
         &#125;
-
-        if (key.isReadable()) &#123;
-            answerWithEcho(buffer, key);
-        &#125;
-        iter.remove();
+        return true;
     &#125;
 &#125;
 </code></pre>
-<p><code>Selector</code>的wakeup()方法主要作用是解除阻塞在Selector.select()/select(long)上的线程，立即返回，调用了本地的中断方法。可以在注册了新的channel或者事件、channel关闭，取消注册时使用，或者优先级更高的事件触发（如定时器事件），希望及时处理。</p>
-<p>通过NIO的I/O多路复用方式可以节约线程资源，提高网络I/O效率。</p>
-<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><ul>
-<li><a target="_blank" rel="noopener" href="http://redisbook.com/preview/event/file_event.html">Redis 设计与实现-文件事件</a></li>
-<li><a target="_blank" rel="noopener" href="https://draveness.me/redis-io-multiplexing">Redis 和 I/O 多路复用</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.baeldung.com/java-nio-selector">Introduction to the Java NIO Selector</a></li>
-</ul>
+<p>另外看到这题有一个很优雅的写法：</p>
+<pre><code class="java">class Solution &#123;
+    public boolean isValidBST(TreeNode root) &#123;
+        return isValid(root, Long.MIN_VALUE, Long.MAX_VALUE);
+    &#125;
+
+    private boolean isValid(TreeNode node, long min, long max) &#123;
+        if (node == null) &#123;
+            return true;
+        &#125;
+        if (node.val &lt;= min || node.val &gt;= max)&#123;
+            return false;
+        &#125;
+        return isValid(node.left, min, node.val) &amp;&amp; isValid(node.right, node.val, max);
+    &#125;
+&#125;
+</code></pre>
 
       
     </div>
@@ -566,7 +484,7 @@ serverSocket.register(selector, SelectionKey.OP_ACCEPT);
     
     <li class="post-copyright-link hidden-xs">
       <strong>本文链接：</strong>
-      <a href="https://juniousy.github.io/2019/06/04/%E5%AD%98%E6%A1%A3/%E4%BB%8ERedis-I-O%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E5%88%B0Java-NIO-Selector/" title="【本科时期文章】从Redis I/O多路复用到Java NIO Selector" target="_blank" rel="external">https://juniousy.github.io/2019/06/04/存档/从Redis-I-O多路复用到Java-NIO-Selector/</a>
+      <a href="https://juniousy.github.io/2022/09/20/2022/%E9%9D%9E%E9%80%92%E5%BD%92%E4%B8%AD%E5%BA%8F%E9%81%8D%E5%8E%86%E4%BA%8C%E5%8F%89%E6%A0%91/" title="【本科时期文章】实现LRUCache" target="_blank" rel="external">https://juniousy.github.io/2022/09/20/2022/非递归中序遍历二叉树/</a>
     </li>
     
     <li class="post-copyright-license">
@@ -610,13 +528,9 @@ serverSocket.register(selector, SelectionKey.OP_ACCEPT);
   
   <ul class="pager pull-left">
     
-    <li class="prev">
-      <a href="/2019/06/05/%E5%AD%98%E6%A1%A3/Redis%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%BC%96%E7%A0%81/" title="【本科时期文章】Redis的数据结构与编码"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
-    </li>
-    
     
     <li class="next">
-      <a href="/2019/05/17/%E5%AD%98%E6%A1%A3/LeetCode-23-Merge-k-Sorted-Lists/" title="【本科时期文章】LeetCode 23. Merge k Sorted Lists"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+      <a href="/2022/08/29/2022/6.824Lab2C/" title="MIT 6.824 Lab2C"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
     </li>
     
     
